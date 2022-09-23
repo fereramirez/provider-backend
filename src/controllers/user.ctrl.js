@@ -39,7 +39,7 @@ const sendVerifyEmail = async (req, res, next) => {
   try {
     const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
-    const link = `http://localhost:3000/verify/${verifyToken}`;
+    const link = `https://providerstore.vercel.app/verify/${verifyToken}`;
     //!VOLVER A VER modificar url de localhost
 
     await sendEmail(
@@ -213,7 +213,7 @@ const forgotPassword = async (req, res, next) => {
       { expiresIn: "15m" }
     );
 
-    const link = `http://localhost:3000/reset/${body._id}/${resetToken}`;
+    const link = `https://providerstore.vercel.app/reset/${body._id}/${resetToken}`;
 
     await sendEmail(
       userFound.email,

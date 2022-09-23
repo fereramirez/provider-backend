@@ -14,7 +14,7 @@ const clientDb = require("./database/db");
 const app = express();
 
 // ---------------- Config
-let whitelist = ["http://localhost:3000", "otro dominio"];
+let whitelist = ["http://localhost:3000", "https://providerstore.vercel.app/"];
 let corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {

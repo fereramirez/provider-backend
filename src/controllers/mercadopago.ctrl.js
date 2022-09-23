@@ -51,9 +51,9 @@ const mpCho = async (req, res, next) => {
             notification_url: `${NOTIF_BACK_URL}`,
             //! volver a ver: front URL
             back_urls: {
-                success: `http://localhost:3000/orders/post-sale/`,
-                failure: `http://localhost:3000/orders/post-sale/`,
-                pending: `http://localhost:3000/orders/post-sale/`
+                success: `https://providerstore.vercel.app/orders/post-sale/`,
+                failure: `https://providerstore.vercel.app/orders/post-sale/`,
+                pending: `https://providerstore.vercel.app/orders/post-sale/`
             },
             expires: true,
             expiration_date_from: order.expiration_date_from,
