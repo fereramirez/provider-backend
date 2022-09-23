@@ -4,6 +4,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const allowCors = require("./allowCors");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/index");
 const { v4: uuidv4 } = require("uuid");
@@ -39,7 +40,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(mongoSanitize());
-app.use("/", cors(corsOptions), router);
+app.use("/", allowCors, router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
