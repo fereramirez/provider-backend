@@ -8,8 +8,9 @@ const clientDb = mongoose.connect(
         useNewUrlParser: true,
         useUnifiedTopology: true,
     },
-    () => {
-        console.log("Mongoose connected");
+    (err) => {
+        if(err) console.log(err) 
+        else console.log("mongdb is connected");
     }
 );
 

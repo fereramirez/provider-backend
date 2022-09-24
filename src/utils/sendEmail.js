@@ -47,8 +47,14 @@ Handlebars.registerHelper("quantity", function (quantity) {
 const sendEmail = async (email, subject, templateUrl, variables) => {
   console.log("sendEmail");
   try {
-    const filePath = path.join(__dirname, templateUrl);
+    // console.log("filePath", filePath);
+    console.log("templateUrl", templateUrl);
+
+    const filePath = path.join(process.cwd(), "files", templateUrl);
     const source = fs.readFileSync(filePath, "utf-8").toString();
+
+    console.log("despues readFileSync");
+
     const template = Handlebars.compile(source);
     const html = template(variables);
 
