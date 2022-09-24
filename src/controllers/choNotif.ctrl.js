@@ -112,6 +112,7 @@ const notificationStripe = async (req, res, next) => {
 };
 
 const notificationMercadopago = async (req, res, next) => {
+    console.log(req.query)
     try {
         const { type } = req.query;
 
@@ -198,6 +199,7 @@ const notificationMercadopago = async (req, res, next) => {
 
         return res.status(200).send("");
     } catch (error) {
+        console.log(error)
         next(error);
     }
 };
