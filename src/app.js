@@ -16,22 +16,23 @@ const app = express();
 
 // ---------------- Config
 let whitelist = [
-  "http://localhost:3000",
-  "https://providerstore.vercel.app/",
-  "https://providerstore.vercel.app",
+    "http://localhost:3000",
+    "https://providerstore.vercel.app",
+    "*"
 ];
 let corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}; 
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+};
 
 // ---------------- MIDDLEWARES
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 //app.use(csrf());
@@ -44,14 +45,14 @@ app.use("/", cors(corsOptions), router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || err;
+    const status = err.status || 500;
+    const message = err.message || err;
 
-  return res.status(status).send(message);
+    return res.status(status).send(message);
 });
 
 app.get("/", (req, res) => {
-  res.send('"hola." -Facu-sama');
+    res.send('"hola." -Facu-sama');
 });
 
 module.exports = app;

@@ -56,6 +56,9 @@ const productSchema = new Schema(
             },
         ],
         available_quantity: Number,
+        buyers: [
+            String
+        ],
         free_shipping: Boolean,
         images: [
             {
@@ -76,7 +79,14 @@ const productSchema = new Schema(
         undeletable: {
             type: Boolean,
             default: false,
-        }
+        },
+        comments: [
+            {
+                user_id: String,
+                text: String,
+                calification: Number
+            }
+        ]
     },
     {
         versionKey: false,
@@ -91,17 +101,14 @@ productSchema.virtual("sale_price").get(function () {
 productSchema.virtual("thumbnail").get(function () {
     return this.images[0].imgURL;
 });
+productSchema.virtual("average_calification").get(function () {
+    if (this.comments.length === 0) return '0'
+
+    let suma = 0;
+    this.comments.forEach(comment => suma += comment.calification);
+    let promedio = (suma / this.comments.length).toFixed(2);
+
+    return promedio;
+});
 
 module.exports = model("Product", productSchema);
-
-/* 
-
-{
-    premiumData: {
-        miniDescription: String,
-        color: String,
-        extraText: [{}]
-    }
-}
-
-*/
