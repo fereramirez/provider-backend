@@ -15,7 +15,7 @@ const clientDb = require("./database/db");
 const app = express();
 
 // ---------------- Config
-/* let whitelist = [
+let whitelist = [
   "http://localhost:3000",
   "https://providerstore.vercel.app/",
   "https://providerstore.vercel.app",
@@ -29,7 +29,7 @@ let corsOptions = {
     }
   },
   credentials: true,
-}; */
+}; 
 
 // ---------------- MIDDLEWARES
 app.use(express.json({ limit: "50mb" }));
@@ -40,7 +40,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(mongoSanitize());
-app.use("/", allowCors(), router);
+app.use("/", cors(corsOptions), router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
