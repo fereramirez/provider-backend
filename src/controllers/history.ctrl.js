@@ -115,6 +115,7 @@ const getSuggestion = async (req, res, next) => {
 
     return res.json(response);
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };
