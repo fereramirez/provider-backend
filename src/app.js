@@ -40,7 +40,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(mongoSanitize());
-app.use("/", allowCors, router);
+app.use("/", cors(corsOptions), router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
