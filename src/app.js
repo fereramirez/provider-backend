@@ -32,7 +32,14 @@ let corsOptions = {
 }; 
 
 // ---------------- MIDDLEWARES
-app.use(allowCors());
+// ---------------- Preflight response
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json(({
+            body: "OK"
+        }))
+    }
+});
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
