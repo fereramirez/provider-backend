@@ -218,7 +218,7 @@ const forgotPassword = async (req, res, next) => {
     await sendEmail(
       userFound.email,
       "Reestablecer contraseña",
-      `../utils/templates/resetPassword.html`,
+      `./templates/resetPassword.html`,
       { link }
     );
 
