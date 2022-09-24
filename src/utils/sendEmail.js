@@ -45,6 +45,7 @@ Handlebars.registerHelper("quantity", function (quantity) {
 });
 
 const sendEmail = async (email, subject, templateUrl, variables) => {
+  console.log("sendEmail");
   try {
     const filePath = path.join(__dirname, templateUrl);
     const source = fs.readFileSync(filePath, "utf-8").toString();
@@ -74,6 +75,7 @@ const sendEmail = async (email, subject, templateUrl, variables) => {
     const result = await transport.sendMail(mailOptions);
     return result;
   } catch (error) {
+    console.log(error);
     throw new Error(error);
   }
 };
