@@ -5,7 +5,7 @@ const {
   notificationMercadopago,
 } = require("../controllers/choNotif.ctrl.js");
 
-router.post("/mp/", notificationMercadopago);
+router.post("/mp", notificationMercadopago);
 router.post("/s", notificationStripe);
 
 module.exports = router;
