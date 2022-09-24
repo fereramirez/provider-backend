@@ -29,11 +29,12 @@ let corsOptions = {
     }
   },
   credentials: true,
-}; 
+};
 
 // ---------------- MIDDLEWARES
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+//app.use(express.static("public"));
 //app.use(csrf());
 app.use(morgan("dev"));
 
