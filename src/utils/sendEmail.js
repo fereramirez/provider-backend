@@ -48,7 +48,8 @@ const sendEmail = async (email, subject, templateUrl, variables) => {
   console.log("sendEmail");
   try {
     const filePath = path.join(__dirname, templateUrl);
-    console.log("antes readFileSync");
+    console.log("filePath", filePath);
+    console.log("templateUrl", templateUrl);
     const source = fs.readFileSync(filePath, "utf-8").toString();
     console.log("despues readFileSync");
     const template = Handlebars.compile(source);
