@@ -45,7 +45,7 @@ const sendVerifyEmail = async (req, res, next) => {
     await sendEmail(
       email,
       `${newUser ? "Bienvenido a Provider" : "Verificación de email"}`,
-      `../utils/templates/${newUser ? "signup" : "verifyEmail"}.html`,
+      `./templates/${newUser ? "signup" : "verifyEmail"}.html`,
       { link }
     );
 
@@ -65,13 +65,13 @@ const signin = async (req, res, next) => {
 
   passport.authenticate("signin", async (err, user, info) => {
     try {
-      console.log(err)
+      console.log(err);
       if (err || !user) throw new Error(info.message);
       //const error = new Error(info);
       //return next(info);
 
       req.login(user, { session: false }, async (err) => {
-        console.log(err)
+        console.log(err);
         if (err) return next(err);
         const { _id, email, name, role, avatar, isGoogleUser } = user;
 
@@ -83,14 +83,14 @@ const signin = async (req, res, next) => {
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
         });
-        console.log(email)
+        console.log(email);
         return res.json({
           token,
           user: { email, name, role, avatar },
         });
       });
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return next(e);
     }
   })(req, res, next);
@@ -307,7 +307,7 @@ const updatePassword = async (req, res, next) => {
     await sendEmail(
       userFound.email,
       "Contraseña modificada",
-      `../utils/templates/passwordUpdated.html`,
+      `./templates/passwordUpdated.html`,
       null
     );
 

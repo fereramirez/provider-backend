@@ -87,7 +87,7 @@ const notificationStripe = async (req, res, next) => {
       await sendEmail(
         userFound.email,
         "Resúmen de compra",
-        `../utils/templates/orderResume.html`,
+        `./templates/orderResume.html`,
         {
           order_id: _id,
           date: formatDate(payment_date),
@@ -179,7 +179,7 @@ const notificationMercadopago = async (req, res, next) => {
         await sendEmail(
           userFound.email,
           "Resúmen de compra",
-          `../utils/templates/orderResume.html`,
+          `./templates/orderResume.html`,
           {
             order_id: _id,
             date: formatDate(payment_date),

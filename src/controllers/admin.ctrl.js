@@ -42,7 +42,7 @@ const promoteUser = async (req, res, next) => {
     await sendEmail(
       userFound.email,
       "Bienvenido, ADMIN",
-      `../utils/templates/promotedUser.html`,
+      `.templates/promotedUser.html`,
       null
     );
 
@@ -210,7 +210,7 @@ const banUser = async (req, res, next) => {
     await sendEmail(
       userFound.email,
       "Suspensión de cuenta",
-      `../utils/templates/bannedUser.html`,
+      `./templates/bannedUser.html`,
       null
     );
 
@@ -234,7 +234,7 @@ const unbanUser = async (req, res, next) => {
     await sendEmail(
       userFound.email,
       "Cuenta recuperada",
-      `../utils/templates/unbannedUser.html`,
+      `./templates/unbannedUser.html`,
       null
     );
 
