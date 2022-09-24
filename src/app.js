@@ -32,15 +32,6 @@ let corsOptions = {
 }; 
 
 // ---------------- MIDDLEWARES
-// ---------------- Preflight response
-app.use((req, res, next) => {
-    if (req.method === 'OPTIONS') {
-        return res.status(200).json(({
-            body: "OK"
-        }))
-    }
-});
-
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 //app.use(csrf());
@@ -49,7 +40,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(mongoSanitize());
-app.use("/", cors(corsOptions), router);
+// app.use("/", cors(corsOptions), router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
