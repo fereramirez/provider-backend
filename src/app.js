@@ -1,7 +1,6 @@
 require("dotenv").config();
 const morgan = require("morgan");
 const mongoSanitize = require("express-mongo-sanitize");
-const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -9,22 +8,9 @@ const allowCors = require("./allowCors");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/index");
 const { v4: uuidv4 } = require("uuid");
-const { DB_URL } = process.env;
 //const csrf = require("csurf");
 
 //const clientDb = require("./database/db");
-
-mongoose.connect(
-  DB_URL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  (err) => {
-    if (err) console.log(err);
-    else console.log("mongdb is connected");
-  }
-);
 
 const app = express();
 
