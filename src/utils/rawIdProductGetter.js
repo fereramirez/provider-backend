@@ -1,6 +1,6 @@
 const Product = require("../models/product");
 const { meliItemParser, meliProductParser } = require("./meliParser");
-const axios = require('axios')
+const axios = require('axios');
 
 const rawIdProductGetter = async (id) => {
     try {
@@ -13,14 +13,15 @@ const rawIdProductGetter = async (id) => {
         } else if (/^IMLA/.test(id)) {
             const meli = `https://api.mercadolibre.com/items/${id.slice(1)}`;
             const { data } = await axios(meli);
-            const item = meliItemParser(data);
-            return item;
+            const product = meliItemParser(data);
+            return product;
 
         } else {
             if (id.length !== 24) {
                 return { error: true, message: 'ID de producto incorrecta (solo se aceptan IDs de 24 caracteres)' }
             }
             const product = await Product.findById(id);
+
             if (product) {
                 return product
             } else {

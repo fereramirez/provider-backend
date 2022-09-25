@@ -84,6 +84,7 @@ const productSchema = new Schema(
             {
                 user_id: String,
                 text: String,
+                date: String,
                 calification: Number
             }
         ]

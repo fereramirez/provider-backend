@@ -41,35 +41,32 @@ const options = {
     useNewUrlParser: true,
 };
 
-let mongoClient = null;
+let mongoConnected = null;
 
 const mongoConn = async (req, res, next) => {
     try {
-        if (mongoClient) {
-            console.log('ya esta conectado');
-            return mongoClient;
+        if (mongoConnected) {
+            return mongoConnected;
         }
-        setTimeout(() => {
-            return mongoose.connect(
-                DB_URL,
-                {
-                    useNewUrlParser: true,
-                    useUnifiedTopology: true,
-                },
-                (err) => {
-                    if (err) console.log(err);
-                    else {
-                        mongoClient = true;
-                        console.log("MongDB is connected")
-                    };
-                }
-            );
-        }, 5000);
-
+        return mongoose.connect(
+            DB_URL,
+            options,
+            (err) => {
+                if (err) console.log(err);
+                else {
+                    mongoConnected = true;
+                    console.log("MongDB connected")
+                };
+            }
+        );
     } catch (error) {
         console.log(error)
     } finally {
-        next()
+        mongoConnected
+            ? next()
+            : setTimeout(() => {
+                next()
+            }, 5000);
     }
 };
 
@@ -97,7 +94,7 @@ app.use((err, req, res, next) => {
     return res.status(status).send(message);
 });
 app.get("/", (req, res) => {
-    res.send('"hola." -Facu-sama');
+    res.send('Welcome to Provider API');
 });
 
 

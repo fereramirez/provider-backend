@@ -12,6 +12,7 @@ const mpRouter = require("./mercadopago.router");
 const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const choNotif = require("./choNotif.router");
+const commentsRouter = require("./comments.router");
 const {
     verifyToken,
     verifyAdmin,
@@ -26,6 +27,7 @@ router.use("/order", verifyToken, orderRouter);
 router.use("/address", verifyToken, addressRouter);
 router.use("/history", historyRouter);
 router.use("/product", productsRouter);
+router.use("/comments", commentsRouter);
 router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
