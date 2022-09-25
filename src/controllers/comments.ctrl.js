@@ -21,7 +21,9 @@ const postComment = async (req, res, next) => {
 
         if (!targetProduct) return res.json({ error: true, message: 'Producto no encontrado, ID incorrecta' });
         if (!targetProduct.buyers.includes(userId)) return res.json({ error: true, message: 'Usuario no autorizado' });
-        if (targetProduct.comments.map(c => c.user_id === userId)) return res.json({ error: true, message: 'Este usuario ya comentó en esta publicación' });
+
+
+        if (targetProduct.comments.map(c => c.user_id === userId).length > 0) return res.json({ error: true, message: 'Este usuario ya comentó en esta publicación' });
 
         const newProd = await product.findByIdAndUpdate(product_id,
             {

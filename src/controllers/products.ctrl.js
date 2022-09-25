@@ -139,12 +139,12 @@ const getById = async (req, res, next) => {
         if (product.error) return res.json(product)
 
         let allowComment = false;
-        if (!/MLA/g.test(product._id)) {
+        if (!/MLA/g.test(product.id)) { //: si no es de Meli puede tener comentarios
             const { comments, list } = await commentsParser(product.comments);
 
-            if (req?.user?._id) {
-                if (product.buyers) {
-                    if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) {
+            if (req?.user._id) { //: si el usuario está logeado...
+                if (product.buyers) { //: ...y el producto tiene compradores...
+                    if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) { //: ...puede comentar?
                         allowComment = true;
                     }
                 }
