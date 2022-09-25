@@ -70,8 +70,6 @@ const sendEmail = async (email, subject, templateUrl, variables) => {
     console.log("---------------------------------------------------");
     console.log(subject);
     console.log("---------------------------------------------------");
-    console.log(html);
-    console.log("---------------------------------------------------");
 
     const mailOptions = {
       from: `Provider <${EMAIL_EPROVIDER}>`,
