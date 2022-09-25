@@ -208,7 +208,7 @@ const banUser = async (req, res, next) => {
     await User.findByIdAndUpdate(id, { role: "banned" });
 
     await sendEmail(
-      userFound.email,
+      userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
       "Suspensión de cuenta",
       `./templates/bannedUser.html`,
       null
@@ -232,7 +232,7 @@ const unbanUser = async (req, res, next) => {
     await User.findByIdAndUpdate(id, { role: "client" });
 
     await sendEmail(
-      userFound.email,
+      userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
       "Cuenta recuperada",
       `./templates/unbannedUser.html`,
       null

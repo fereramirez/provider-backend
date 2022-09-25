@@ -85,7 +85,7 @@ const notificationStripe = async (req, res, next) => {
       } = newOrder;
 
       await sendEmail(
-        userFound.email,
+        userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
         "Resúmen de compra",
         `./templates/orderResume.html`,
         {
@@ -177,7 +177,7 @@ const notificationMercadopago = async (req, res, next) => {
         } = newOrder;
 
         await sendEmail(
-          userFound.email,
+          userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
           "Resúmen de compra",
           `./templates/orderResume.html`,
           {
