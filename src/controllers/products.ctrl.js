@@ -138,18 +138,21 @@ const getById = async (req, res, next) => {
 
         if (product.error) return res.json(product)
 
-        const { comments, list } = await commentsParser(product.comments);
-
         let allowComment = false;
-        if (req?.user?._id) {
-            if (product.buyers) {
-                if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) {
-                    allowComment = true;
+        if (!/MLA/g.test(product._id)) {
+            const { comments, list } = await commentsParser(product.comments);
+
+            if (req?.user?._id) {
+                if (product.buyers) {
+                    if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) {
+                        allowComment = true;
+                    }
                 }
             }
+            return res.json({ product, comments, allowComment });
         }
 
-        return res.json({ product, comments, allowComment });
+        return res.json({ product });
     } catch (error) {
         next(error);
     }

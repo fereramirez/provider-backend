@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const { verifyAdmin } = require("../middlewares/verify");
 const {
     getComments,
     postComment,
@@ -10,6 +11,6 @@ const {
 router.get("/", getComments);
 router.post("/", postComment);
 router.put("/", editComment);
-router.delete("/", deleteComment);
+router.delete("/", verifyAdmin, deleteComment);
 
 module.exports = router;

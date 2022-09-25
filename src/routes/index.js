@@ -27,7 +27,7 @@ router.use("/order", verifyToken, orderRouter);
 router.use("/address", verifyToken, addressRouter);
 router.use("/history", historyRouter);
 router.use("/product", productsRouter);
-router.use("/comments", commentsRouter);
+router.use("/comments", verifyToken, commentsRouter);
 router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
