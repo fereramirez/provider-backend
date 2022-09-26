@@ -67,7 +67,7 @@ const create = async (req, res, next) => {
         await Order.findByIdAndUpdate(orderId, {
             $set: {
                 payment_link: session.url,
-                expiration_date_to: expiration,
+                expiration_date_to: expiration(),
                 payment_source: "Stripe",
                 payment_intent: session.payment_intent,
             },
