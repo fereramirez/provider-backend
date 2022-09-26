@@ -72,7 +72,7 @@ const addToCart = async (req, res, next) => {
         });
       }
       await cart.save();
-      return res.json({ message: "Producto agregado al carrito" });
+      return res.json({ message: "Producto agregado al carrito", ok: true });
     } else {
       const newCart = new Cart({
         products: [
