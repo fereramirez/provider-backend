@@ -137,7 +137,7 @@ const getById = async (req, res, next) => {
         const product = await rawIdProductGetter(id);
 
         if (product.error) return res.json(product)
-        // let stringId = (product._id).toString()
+
 
         let allowComment = false;
         if (!/MLA/g.test(id)) { //: si no es de Meli puede tener comentarios
@@ -145,8 +145,8 @@ const getById = async (req, res, next) => {
 
             if (req?.user?._id) { //: si el usuario está logeado...
                 if (product.buyers) { //: ...y el producto tiene compradores...
-                    if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) { //: ...puede comentar?
-                        allowComment = true;
+                    if (product.buyers.includes(req.user._id) && !list.includes(req.user._id.toString())) { //: ...ya compró y no comentó...
+                        allowComment = true; //: ...puede comentar?
                     }
                 }
             }
