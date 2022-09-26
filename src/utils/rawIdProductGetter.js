@@ -32,6 +32,7 @@ const rawIdProductGetter = async (id) => {
         };
 
     } catch (error) {
+        console.log(error);
         throw new Error(error);
     }
 };
