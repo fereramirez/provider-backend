@@ -127,7 +127,7 @@ async function addHeaderIfLogged(req, res, next) {
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
-            next()
+            return next()
         }
         let token = authHeader.split(" ")[1];
         const isGoogleUser = token.slice(0, 6);
