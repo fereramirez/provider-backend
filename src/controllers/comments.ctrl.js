@@ -1,4 +1,5 @@
 const product = require("../models/product");
+const commentsParser = require("../utils/commentsParser");
 
 const getComments = async (req, res, next) => {
     try {
@@ -23,7 +24,7 @@ const postComment = async (req, res, next) => {
         if (!targetProduct.buyers.includes(userId)) return res.json({ error: true, message: 'Usuario no autorizado' });
 
 
-        if (targetProduct.comments.map(c => c.user_id === userId).length > 0) return res.json({ error: true, message: 'Este usuario ya comentó en esta publicación' });
+        if (targetProduct.comments.find(c => c.user_id === userId)) return res.json({ error: true, message: 'Este usuario ya comentó en esta publicación' });
 
         const newProd = await product.findByIdAndUpdate(product_id,
             {
@@ -39,7 +40,12 @@ const postComment = async (req, res, next) => {
             { new: true }
         );
 
-        if (newProd) return res.json({ error: false, message: 'Comentario publicado' })
+        const newComment = newProd.comments.find(c => c.user_id === userId.toString())
+        console.log(newComment);
+        const new_id = newComment?._id.toString();
+        console.log(new_id);
+
+        if (newProd) return res.json({ message: 'Comentario publicado', new_id })
         else return res.json({ error: true, message: 'Algo salió mal' })
 
     } catch (error) {
@@ -78,7 +84,9 @@ const editComment = async (req, res, next) => {
             { new: true }
         );
 
-        return res.json(updatedComment.comments)
+        if (updatedComment) return res.json({ message: 'Comentario actualizado' })
+        else return res.json({ error: true, message: 'Algo salió mal' })
+
     } catch (error) {
         console.log(error)
         next(error)
