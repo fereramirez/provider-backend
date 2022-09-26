@@ -137,12 +137,13 @@ const getById = async (req, res, next) => {
         const product = await rawIdProductGetter(id);
 
         if (product.error) return res.json(product)
+        // let stringId = (product._id).toString()
 
         let allowComment = false;
-        if (!/MLA/g.test(product.id)) { //: si no es de Meli puede tener comentarios
+        if (!/MLA/g.test(id)) { //: si no es de Meli puede tener comentarios
             const { comments, list } = await commentsParser(product.comments);
 
-            if (req?.user._id) { //: si el usuario está logeado...
+            if (req?.user?._id) { //: si el usuario está logeado...
                 if (product.buyers) { //: ...y el producto tiene compradores...
                     if (product.buyers.includes(req.user._id) && !list.includes(req.user._id)) { //: ...puede comentar?
                         allowComment = true;
@@ -154,6 +155,7 @@ const getById = async (req, res, next) => {
 
         return res.json({ product });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
