@@ -45,13 +45,33 @@ const productUpdater = async (products, order) => {
       await prod.save();
 
       const publicationFound = await Publication.findOne({ product: id });
-      publicationFound.sales.push({
-        buyer: user_id,
-        quantity: amount,
-        price,
-        payment_date,
-        delivery_date,
-      });
+
+      console.log("publicationFound", publicationFound);
+      console.log("user_id", user_id);
+      console.log("amount", amount);
+      console.log("price", price);
+      console.log("payment_date", payment_date);
+      console.log("delivery_date", delivery_date);
+
+      if (publicationFound.sales) {
+        publicationFound.sales.push({
+          buyer: user_id,
+          quantity: amount,
+          price,
+          payment_date,
+          delivery_date,
+        });
+      } else {
+        publicationFound.sales = [
+          {
+            buyer: user_id,
+            quantity: amount,
+            price,
+            payment_date,
+            delivery_date,
+          },
+        ];
+      }
       await publicationFound.save();
     }
   }
