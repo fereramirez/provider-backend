@@ -3,6 +3,20 @@ const Product = require("../models/product");
 const Sales = require("../models/Sales");
 const { random } = require("../utils/random");
 
+const imgUrlChanger = async (id) => {
+    const target = await Product.findById(id);
+
+    target.images.forEach(pic => {
+        if (/^http:/.test(pic.imgURL)) {
+            pic.imgURL = pic.imgURL.replace('http:', 'https:')
+        }
+    });
+
+    await target.save();
+
+    return
+}
+
 const salesMaker = async () => {
     const discounts = [25, 30, 50, 35, 40, 20];
     try {
@@ -48,7 +62,7 @@ const salesMaker = async () => {
                         available_quantity: 50,
                     },
                 }))();
-        }
+        };
 
         // guarda las id nuevas
         sales.products = new_ids;
@@ -99,4 +113,5 @@ module.exports = {
     salesMaker,
     salesChecker,
     flashSales,
+    imgUrlChanger
 };
