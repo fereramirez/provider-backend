@@ -16,8 +16,6 @@ const getUserNotifications = async (req, res, next) => {
 
         const userNotifs = await Notifications.findOne({ user_id: userId })
 
-        console.log(userNotifs);
-
         if (!userNotifs) {
             const newNotif = await Notifications.create({
                 user_id: userId,
@@ -104,8 +102,42 @@ const markAsSeen = async (req, res, next) => {
     }
 }
 
+const post = async (req, res, next) => {
+    try {
+        const { userId } = req.body
+        const {
+            notif_type,
+            title,
+            description,
+            link
+        } = req.body
+
+        const notif = await Notifications.findOne({ user_id: userId });
+        if (notif) {
+            notif.notif_list.push({
+                notif_type,
+                title,
+                description,
+                link: link || false,
+                date: '1/1/1111, 11:11:11',
+                seen: false
+            })
+            await notif.save();
+        } else {
+            res.json('error');
+        }
+
+        res.json('done');
+
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
+}
+
 module.exports = {
     getUserNotifications,
     deleteNotification,
-    markAsSeen
+    markAsSeen,
+    post
 }

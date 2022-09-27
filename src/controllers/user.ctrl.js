@@ -138,7 +138,7 @@ const profile = async (req, res, next) => {
         let wish = wishFound?.products || [];
 
         const notifFound = await Notifications.findOne({ user_id: userId });
-        let notif = notifFound || [];
+        let notif = notifFound?.notif_list || [];
 
         let aux = {
             user,
