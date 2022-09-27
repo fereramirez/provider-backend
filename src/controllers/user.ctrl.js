@@ -376,9 +376,4 @@ module.exports = {
   updatePassword,
   editProfile,
   setAvatar,
-  createProductUser,
-  updateProductUser,
-  setDiscountUser,
-  removeDiscountUser,
-  deleteProductUser,
 };
