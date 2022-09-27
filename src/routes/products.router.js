@@ -14,8 +14,6 @@ const {
   setDiscount,
   removeDiscount,
   deleteProduct,
-
-  addSeller,
 } = require("../controllers/products.ctrl.js");
 const { verifyToken } = require("../middlewares/verify");
 
@@ -33,7 +31,5 @@ router.put("/:id", verifyToken, updateProduct);
 router.put("/discount/:id", verifyToken, setDiscount);
 router.delete("/discount/:id", verifyToken, removeDiscount);
 router.delete("/:id", verifyToken, deleteProduct);
-
-router.put("/addSeller", addSeller);
 
 module.exports = router;

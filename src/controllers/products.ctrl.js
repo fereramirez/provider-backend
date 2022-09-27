@@ -531,24 +531,6 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-const addSeller = async (req, res, next) => {
-  try {
-    const productsFound = await Product.find();
-
-    console.log(productsFound[0]);
-
-    for (const prod of productsFound) {
-      prod.seller = "PROVIDER";
-      await prod.save();
-    }
-
-    return res.json({ message: "Seller agregados" });
-  } catch (error) {
-    console.log("add seller error", error);
-    next(error);
-  }
-};
-
 module.exports = {
   getAll,
   getProds,
@@ -563,6 +545,4 @@ module.exports = {
   setDiscount,
   removeDiscount,
   deleteProduct,
-
-  addSeller,
 };

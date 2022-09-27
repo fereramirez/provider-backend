@@ -86,13 +86,9 @@ const productSchema = new Schema(
         calification: Number,
       },
     ],
-    /* seller: {
+    seller: {
       type: Schema.Types.ObjectId,
       ref: "User",
-    }, */
-    seller: {
-      type: String,
-      required: true,
     },
   },
   {
