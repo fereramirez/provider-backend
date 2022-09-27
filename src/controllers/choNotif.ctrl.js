@@ -31,7 +31,7 @@ const productUpdater = async (products, order) => {
   }));
 
   for (const prod of list) {
-    let { id, amount } = prod;
+    let { id, amount, price } = prod;
 
     if (!/MLA/g.test(id)) {
       const prod = await product.findById(id);
