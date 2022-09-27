@@ -324,6 +324,7 @@ const createProduct = async (req, res, next) => {
           ? "PROVIDER"
           : req.user._id,
       product: newProduct._id,
+      sales: [],
     });
     await newPublication.save();
 
