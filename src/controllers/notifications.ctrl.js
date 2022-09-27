@@ -14,7 +14,9 @@ const getUserNotifications = async (req, res, next) => {
 
         if (!userId) return res.json({ error: true, message: 'ID de usuario no necesaria' });
 
-        const userNotifs = Notifications.findOne({ user_id: userId })
+        const userNotifs = await Notifications.findOne({ user_id: userId })
+
+        console.log(userNotifs);
 
         if (!userNotifs) {
             const newNotif = await Notifications.create({
