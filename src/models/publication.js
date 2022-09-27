@@ -11,6 +11,7 @@ const PublicationSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Product",
     },
+    publication_date: String,
     sales: [
       {
         buyer: String,

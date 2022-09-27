@@ -324,6 +324,11 @@ const createProduct = async (req, res, next) => {
           ? "PROVIDER"
           : req.user._id,
       product: newProduct._id,
+      publication_date: Date.now(
+        new Date().toLocaleString("es-Ar", {
+          timeZone: "America/Buenos_Aires",
+        })
+      ),
     });
     await newPublication.save();
 
