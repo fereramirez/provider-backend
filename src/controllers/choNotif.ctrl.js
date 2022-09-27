@@ -46,13 +46,6 @@ const productUpdater = async (products, order) => {
 
       const publicationFound = await Publication.findOne({ product: id });
 
-      console.log("publicationFound", publicationFound);
-      console.log("user_id", user_id);
-      console.log("amount", amount);
-      console.log("price", price);
-      console.log("payment_date", payment_date);
-      console.log("delivery_date", delivery_date);
-
       if (publicationFound.sales) {
         publicationFound.sales.push({
           buyer: user_id,
