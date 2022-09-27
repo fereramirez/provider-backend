@@ -4,12 +4,9 @@ const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const Cart = require("../models/cart");
-const order = require("../models/order");
-
 const Wishlist = require("../models/wishlist");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
@@ -379,4 +376,9 @@ module.exports = {
   updatePassword,
   editProfile,
   setAvatar,
+  createProductUser,
+  updateProductUser,
+  setDiscountUser,
+  removeDiscountUser,
+  deleteProductUser,
 };

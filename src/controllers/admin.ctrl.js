@@ -2,13 +2,11 @@ require("dotenv").config();
 const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
   process.env;
 const cloudinary = require("cloudinary").v2;
-const axios = require("axios");
 const User = require("../models/user");
 const Product = require("../models/product");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
-const Sales = require("../models/Sales");
 const sendEmail = require("../utils/sendEmail");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
@@ -244,232 +242,6 @@ const unbanUser = async (req, res, next) => {
   }
 };
 
-const createProduct = async (req, res, next) => {
-  try {
-    const {
-      name,
-      price,
-      brand,
-      category,
-      description,
-      attributes,
-      main_features,
-      available_quantity,
-      free_shipping,
-      images,
-    } = req.body;
-
-    //? path_from_root
-    const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category.id}`
-    );
-
-    const { path_from_root } = data;
-
-    let brandLowerCase = brand.toLowerCase();
-
-    let mainFeaturesArray = [];
-    for (const feature of main_features) {
-      mainFeaturesArray.push(feature.value);
-    }
-
-    const newProduct = new Product({
-      name,
-      price,
-      brand: brandLowerCase,
-      main_features: mainFeaturesArray,
-      attributes,
-      description,
-      category,
-      path_from_root,
-      available_quantity,
-      free_shipping,
-      images,
-    });
-    const productSaved = await newProduct.save();
-
-    res.json(productSaved);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const updateProduct = async (req, res, next) => {
-  try {
-    let {
-      name,
-      price,
-      brand,
-      category,
-      description,
-      attributes,
-      main_features,
-      available_quantity,
-      free_shipping,
-      imgsToEdit,
-      mainImgIndex,
-      newImages,
-    } = req.body;
-
-    let images = [...imgsToEdit, ...newImages];
-
-    if (mainImgIndex !== 0) {
-      const mainImg = images.splice(mainImgIndex, 1)[0];
-      images.splice(0, 0, mainImg);
-    }
-
-    //? actualizar lista de imagenes
-    const productFound = await Product.findById(req.params.id);
-    if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
-
-    let deleteList = [];
-    if (imgsToEdit.length === 0) {
-      for (const img of productFound.images) {
-        deleteList.push(img.public_id);
-      }
-    } else if (imgsToEdit.length > 0) {
-      let imgToKeepId = [];
-      for (const img of imgsToEdit) {
-        imgToKeepId.push(img.public_id);
-      }
-
-      for (const img of productFound.images) {
-        if (!imgToKeepId.includes(img.public_id)) {
-          deleteList.push(img.public_id);
-        }
-      }
-    }
-    deleteList.length && cloudinary.api.delete_resources(deleteList);
-
-    //? path_from_root
-    const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category.id}`
-    );
-
-    const { path_from_root } = data;
-    let brandLowerCase = brand.toLowerCase();
-
-    let mainFeaturesArray = [];
-    for (const feature of main_features) {
-      mainFeaturesArray.push(feature.value);
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          name,
-          price,
-          brand: brandLowerCase,
-          main_features: mainFeaturesArray,
-          attributes,
-          description,
-          category,
-          path_from_root,
-          available_quantity,
-          free_shipping,
-          images,
-        },
-      },
-      { new: true }
-    );
-
-    res.json(updatedProduct);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const setDiscount = async (req, res, next) => {
-  const { type, number } = req.body;
-
-  if (!type)
-    return res.status(400).json({ message: "Tipo de descuento no recibido" });
-  if (!number)
-    return res.status(400).json({ message: "Número de descuento no recibido" });
-  if (type !== "percent" && type !== "fixed") {
-    return res.status(400).json({ message: "Tipo de descuento no soportado" });
-  }
-
-  try {
-    const productFound = await Product.findById(req.params.id);
-    if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
-
-    const autoSales = await Sales.find();
-    if (!autoSales)
-      return res.status(404).json({ message: "Oferta no encontrada" });
-
-    if (autoSales[0].products.includes(req.params.id))
-      return res.status(401).json({
-        message: "No puedes modificar el descuento de este producto",
-      });
-
-    if (type === "percent") {
-      productFound.discount = parseInt(number);
-    } else {
-      const discount = (parseInt(number) * 100) / productFound.price;
-
-      productFound.discount = discount;
-    }
-
-    productFound.on_sale = true;
-    await productFound.save();
-    return res.json({ message: "Descuento aplicado con éxito" });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const removeDiscount = async (req, res, next) => {
-  try {
-    const productFound = await Product.findById(req.params.id);
-    if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
-
-    const autoSales = await Sales.find();
-    if (!autoSales)
-      return res.status(404).json({ message: "Oferta no encontrada" });
-
-    if (autoSales[0].products.includes(req.params.id))
-      return res.status(401).json({
-        message: "No puedes remover el descuento de este producto",
-      });
-
-    productFound.discount = 0;
-    productFound.on_sale = false;
-    await productFound.save();
-    return res.json({ message: "Oferta removida satisfactoriamente" });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const deleteProduct = async (req, res, next) => {
-  try {
-    const prod = await Product.findById(req.params.id);
-    if (prod.undeletable) {
-      return res.json({
-        message: "Producto protegido. Imposible de eliminar",
-        type: "warning",
-      });
-    } else {
-      let deleteList = [];
-      prod.images.forEach((img) => deleteList.push(img.public_id));
-      cloudinary.api.delete_resources(deleteList);
-
-      await Product.findByIdAndDelete(req.params.id);
-      return res.json({
-        message: "Producto eliminado exitosamente",
-        type: "success",
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
 const deleteAllProducts = async (req, res, next) => {
   try {
     // //? no borra nada
@@ -537,11 +309,6 @@ module.exports = {
   getUserWishlist,
   banUser,
   unbanUser,
-  createProduct,
-  updateProduct,
-  setDiscount,
-  removeDiscount,
-  deleteProduct,
   deleteAllProducts,
   getMetrics,
 };

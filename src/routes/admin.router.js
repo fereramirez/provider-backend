@@ -11,11 +11,6 @@ const {
   getUserWishlist,
   banUser,
   unbanUser,
-  createProduct,
-  updateProduct,
-  setDiscount,
-  removeDiscount,
-  deleteProduct,
   deleteAllProducts,
   getMetrics,
 } = require("../controllers/admin.ctrl");
@@ -31,12 +26,7 @@ router.post("/user/getOrders", getUserOrders);
 router.post("/user/getWishlist", getUserWishlist);
 router.delete("/user/:id", banUser);
 router.put("/user/:id", unbanUser);
-router.post("/product/", createProduct);
-router.put("/product/:id", updateProduct);
-router.put("/product/discount/:id", setDiscount);
-router.delete("/product/discount/:id", removeDiscount);
 router.delete("/product/deleteall", deleteAllProducts);
-router.delete("/product/:id", deleteProduct);
 router.get("/metrics", getMetrics);
 
 module.exports = router;
