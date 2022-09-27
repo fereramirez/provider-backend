@@ -18,6 +18,7 @@ const {
   updatePassword,
   editProfile,
   setAvatar,
+  getPublications,
 } = require("../controllers/user.ctrl");
 const { body } = require("express-validator");
 
@@ -102,5 +103,6 @@ router.put(
   updatePassword
 );
 router.put("/editProfile", [verifyToken, verifyEmailVerified], editProfile);
+router.get("/products", verifyToken, getPublications);
 
 module.exports = router;
