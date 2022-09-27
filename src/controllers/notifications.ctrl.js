@@ -10,12 +10,13 @@ const getUserNotifications = async (req, res, next) => {
             date: new Date().toLocaleString('es-Ar', { timeZone: "America/Buenos_Aires" }),
             seen: false
         };
-        const userId = req.body.userId;
-        //: const userId = req.user._id;
+        const userId = req.user._id;
 
         if (!userId) return res.json({ error: true, message: 'ID de usuario no necesaria' });
 
-        const userNotifs = Notifications.findOne({ user_id: userId })
+        const userNotifs = await Notifications.findOne({ user_id: userId })
+
+        console.log(userNotifs);
 
         if (!userNotifs) {
             const newNotif = await Notifications.create({
@@ -45,9 +46,8 @@ const getUserNotifications = async (req, res, next) => {
 
 const deleteNotification = async (req, res, next) => {
     try {
-        const { userId } = req.body;
         const target = req.params.id;
-        //: const userId = req.user._id;
+        const userId = req.user._id;
 
         if (!userId) return res.json({ error: true, message: 'ID de usuario necesaria' });
         if (!target) return res.json({ error: true, message: 'ID de notificación necesaria' });
@@ -77,9 +77,8 @@ const deleteNotification = async (req, res, next) => {
 
 const markAsSeen = async (req, res, next) => {
     try {
-        const { userId } = req.body;
         const target = req.params.id;
-        //: const userId = req.user._id;
+        const userId = req.user._id;
 
         if (!userId) return res.json({ error: true, message: 'ID de usuario necesaria' });
         if (!target) return res.json({ error: true, message: 'ID de notificación necesaria' });
