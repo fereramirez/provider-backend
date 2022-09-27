@@ -535,6 +535,8 @@ const addSeller = async (req, res, next) => {
   try {
     const productsFound = await Product.find();
 
+    console.log(productsFound[0]);
+
     for (const prod of productsFound) {
       prod.seller = "PROVIDER";
       await prod.save();
