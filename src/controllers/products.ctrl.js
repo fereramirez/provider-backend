@@ -542,6 +542,7 @@ const addSeller = async (req, res, next) => {
 
     return res.json({ message: "Seller agregados" });
   } catch (error) {
+    console.log("add seller error", error);
     next(error);
   }
 };
