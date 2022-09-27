@@ -56,6 +56,7 @@ const productSchema = new Schema(
       },
     ],
     available_quantity: Number,
+    seller: String,
     buyers: [String],
     free_shipping: Boolean,
     images: [
@@ -86,10 +87,6 @@ const productSchema = new Schema(
         calification: Number,
       },
     ],
-    seller: {
-      type: String,
-      required: true,
-    },
   },
   {
     versionKey: false,
