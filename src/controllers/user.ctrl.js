@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const Cart = require("../models/cart");
 const Wishlist = require("../models/wishlist");
+const Publication = require("../models/publication");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET_CODE } = process.env;
@@ -324,14 +325,14 @@ const editProfile = async (req, res, next) => {
         const { username, firstname, lastname } = req.body;
 
         /* const userFound = await User.findByIdAndUpdate(
-                          req.user._id,
-                          {
-                            username: username || userFound.username,
-                            firstName: firstname || userFound.firstName,
-                            lastName: lastname || userFound.lastName,
-                          },
-                          { new: true }
-                        ); */
+                              req.user._id,
+                              {
+                                username: username || userFound.username,
+                                firstName: firstname || userFound.firstName,
+                                lastName: lastname || userFound.lastName,
+                              },
+                              { new: true }
+                            ); */
 
         const userFound = await User.findById(req.user._id);
 
@@ -354,8 +355,6 @@ const editProfile = async (req, res, next) => {
 };
 
 const setAvatar = async (req, res, next) => {
-    console.log("------req.body.url", req.body.url);
-
     try {
         const { avatar } = await User.findById(req.user._id);
         avatar &&
@@ -364,6 +363,17 @@ const setAvatar = async (req, res, next) => {
         await User.findByIdAndUpdate(req.user._id, { avatar: req.body.url });
 
         return res.json({ message: "Avatar actualizado", avatar: req.body.url });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getPublications = async (req, res, next) => {
+    try {
+        const userPublications = await Publication.find({ owner: req.user._id });
+        if (!userPublications)
+            return res.json({ message: "No se encontraron publicaciones" });
+        return res.json(userPublications);
     } catch (error) {
         next(error);
     }
@@ -381,4 +391,5 @@ module.exports = {
     updatePassword,
     editProfile,
     setAvatar,
+    getPublications,
 };

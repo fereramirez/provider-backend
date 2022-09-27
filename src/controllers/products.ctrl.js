@@ -4,6 +4,7 @@ const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
 const cloudinary = require("cloudinary").v2;
 const Product = require("../models/product");
 const Sales = require("../models/Sales");
+const Publication = require("../models/publication");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
@@ -316,6 +317,20 @@ const createProduct = async (req, res, next) => {
           : req.user._id,
     });
     const productSaved = await newProduct.save();
+
+    const newPublication = new Publication({
+      owner:
+        req.user.role === "admin" || req.user.role === "superadmin"
+          ? "PROVIDER"
+          : req.user._id,
+      product: newProduct._id,
+      publication_date: Date.now(
+        new Date().toLocaleString("es-Ar", {
+          timeZone: "America/Buenos_Aires",
+        })
+      ),
+    });
+    await newPublication.save();
 
     res.json(productSaved);
   } catch (error) {
