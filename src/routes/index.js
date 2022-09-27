@@ -13,6 +13,7 @@ const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const choNotif = require("./choNotif.router");
 const commentsRouter = require("./comments.router");
+const notificationsRouter = require("./notifications.router");
 const {
     verifyToken,
     verifyAdmin,
@@ -29,6 +30,7 @@ router.use("/address", verifyToken, addressRouter);
 router.use("/history", historyRouter);
 router.use("/product", addHeaderIfLogged, productsRouter);
 router.use("/comments", verifyToken, commentsRouter);
+router.use("/notifications", notificationsRouter);
 router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);

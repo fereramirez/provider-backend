@@ -56,6 +56,7 @@ const productSchema = new Schema(
             },
         ],
         available_quantity: Number,
+        seller: String,
         buyers: [
             String
         ],
