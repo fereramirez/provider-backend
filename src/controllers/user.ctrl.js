@@ -370,9 +370,15 @@ const setAvatar = async (req, res, next) => {
 
 const getPublications = async (req, res, next) => {
   try {
-    const userPublications = await Publication.find({ owner: req.user._id });
+    const userPublications = await Publication.find({
+      owner: req.user._id,
+    })
+      .populate("product")
+      .exec();
+
     if (!userPublications)
       return res.json({ message: "No se encontraron publicaciones" });
+
     return res.json(userPublications);
   } catch (error) {
     next(error);

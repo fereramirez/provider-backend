@@ -531,11 +531,11 @@ const deleteProduct = async (req, res, next) => {
         type: "warning",
       });
     } else {
-      let deleteList = [];
+      /*         let deleteList = [];
       productFound.images.forEach((img) => deleteList.push(img.public_id));
-      cloudinary.api.delete_resources(deleteList);
+      cloudinary.api.delete_resources(deleteList); */
 
-      await Product.findByIdAndDelete(req.params.id);
+      await Product.findByIdAndUpdate(req.params.id, { active: false });
       return res.json({
         message: "Producto eliminado exitosamente",
         type: "success",
