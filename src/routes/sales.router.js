@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    getSales,
-    setNewSales,
-    resetSales,
-    undeletable
+  getSales,
+  setNewSales,
+  resetSales,
+  undeletable,
 } = require("../controllers/sales.ctrl.js");
 
 router.get("/", getSales);

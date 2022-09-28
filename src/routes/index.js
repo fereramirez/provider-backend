@@ -15,10 +15,10 @@ const choNotif = require("./choNotif.router");
 const commentsRouter = require("./comments.router");
 const notificationsRouter = require("./notifications.router");
 const {
-    verifyToken,
-    verifyAdmin,
-    googleUserShallNotPass,
-    addHeaderIfLogged
+  verifyToken,
+  verifyAdmin,
+  googleUserShallNotPass,
+  addHeaderIfLogged,
 } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
@@ -37,9 +37,9 @@ router.use("/mercadopago", verifyToken, mpRouter);
 
 /* //! VOLVER A VER descomentar lo de abajo */
 router.use(
-    "/admin",
-    [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
-    adminRouter
+  "/admin",
+  [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
+  adminRouter
 );
 
 module.exports = router;

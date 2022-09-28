@@ -154,27 +154,6 @@ const profile = async (req, res, next) => {
   }
 };
 
-/* const sendVerifyEmail = async (req, res, next) => {
-  const { _id } = req.user;
-  if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
-
-  try {
-    const userFound = await User.findById(_id);
-
-    if (!userFound)
-      return res.status(404).json({ message: "Cuenta no encontrada" });
-    if (userFound.emailVerified)
-      return res.status(400).json({ message: "Email ya verificado" });
-
-    userFound.emailVerified = true;
-    await userFound.save();
-
-    return res.json({ message: "Email verificado con éxito" });
-  } catch (error) {
-    next(error);
-  }
-}; */
-
 const verifyEmail = async (req, res, next) => {
   const { _id } = req.user;
   if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
@@ -369,6 +348,7 @@ const setAvatar = async (req, res, next) => {
 };
 
 const getPublications = async (req, res, next) => {
+  console.log("----------entra");
   try {
     const userPublications = await Publication.find({
       owner: req.user._id,
@@ -376,11 +356,46 @@ const getPublications = async (req, res, next) => {
       .populate("product")
       .exec();
 
+    console.log("----------1");
     if (!userPublications)
       return res.json({ message: "No se encontraron publicaciones" });
 
-    return res.json(userPublications);
+    let userSales = [];
+    console.log("----------2");
+
+    for (const publication of userPublications) {
+      if (publication.sales.length) {
+        for (const sale of publication.sales) {
+          const userFound = await User.findById(sale.buyer._id);
+          userSales.push({
+            buyer: {
+              _id: userFound._id,
+              email: userFound.isGoogleUser
+                ? userFound.googleEmail
+                : userFound.email,
+              name: userFound.name,
+            },
+            product: publication.product,
+          });
+        }
+      }
+    }
+    console.log("----------3");
+
+    for (const publication of userPublications) {
+      for (const sale of publication.sales) {
+        console.log("--------sale", sale);
+      }
+    }
+    console.log("----------4");
+    /*  console.log("------userPublications", userPublications); */
+
+    return res.json({
+      publications: userPublications,
+      sales: userSales?.length ? userSales : [],
+    });
   } catch (error) {
+    console.log("----------error", error);
     next(error);
   }
 };

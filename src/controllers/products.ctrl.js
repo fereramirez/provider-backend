@@ -315,6 +315,7 @@ const createProduct = async (req, res, next) => {
         req.user.role === "admin" || req.user.role === "superadmin"
           ? "PROVIDER"
           : req.user._id,
+      active: true,
     });
     const productSaved = await newProduct.save();
 
@@ -537,10 +538,32 @@ const deleteProduct = async (req, res, next) => {
 
       await Product.findByIdAndUpdate(req.params.id, { active: false });
       return res.json({
-        message: "Producto eliminado exitosamente",
+        message: "Publicación pausada exitosamente",
         type: "success",
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const reactivateProduct = async (req, res, next) => {
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Producto no encontrado" });
+    if (
+      productFound.seller !== req.user._id &&
+      req.user.role !== "admin" &&
+      req.user.role !== "superadmin"
+    )
+      return res.status(401).json({ message: "Sin autorización" });
+
+    await Product.findByIdAndUpdate(req.params.id, { active: true });
+    return res.json({
+      message: "Publicación reactivada exitosamente",
+      type: "success",
+    });
   } catch (error) {
     next(error);
   }
@@ -560,4 +583,5 @@ module.exports = {
   setDiscount,
   removeDiscount,
   deleteProduct,
+  reactivateProduct,
 };

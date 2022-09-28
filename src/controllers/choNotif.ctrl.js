@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { default: axios } = require("axios");
 const order = require("../models/order");
-const user = require("../models/user");
+const User = require("../models/user");
 const product = require("../models/product");
 const Publication = require("../models/publication");
 const { formatDate, formatPrice } = require("../utils/formatOrderData");
@@ -22,7 +22,7 @@ const deliveryDate = (flash) => {
   return new Date(`${now.split("T")[0]}T15:00:00.000-03:00`).getTime();
 };
 
-const productUpdater = async (products, order) => {
+const productUpdater = async (products, order, buyer) => {
   const { user: user_id, payment_date, delivery_date } = order;
   let list = products.map((e) => ({
     id: e.product_id,
@@ -48,7 +48,11 @@ const productUpdater = async (products, order) => {
 
       if (publicationFound.sales) {
         publicationFound.sales.push({
-          buyer: user_id,
+          buyer: {
+            _id: buyer._id,
+            name: buyer.name,
+            email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
+          },
           quantity: amount,
           price,
           payment_date,
@@ -57,7 +61,12 @@ const productUpdater = async (products, order) => {
       } else {
         publicationFound.sales = [
           {
-            buyer: user_id,
+            buyer: {
+              name: buyer.name,
+              email: userFound.isGoogleUser
+                ? userFound.googleEmail
+                : userFound.email,
+            },
             quantity: amount,
             price,
             payment_date,
@@ -99,10 +108,10 @@ const notificationStripe = async (req, res, next) => {
         )
         .lean();
 
-      //? restar unidades de cada stock y agregar buyers
-      productUpdater(target.products, newOrder);
+      const userFound = await User.findById(newOrder.user);
 
-      const userFound = await user.findById(newOrder.user);
+      //? restar unidades de cada stock y agregar buyers
+      productUpdater(target.products, newOrder, userFound);
 
       const {
         _id,
@@ -185,10 +194,10 @@ const notificationMercadopago = async (req, res, next) => {
           )
           .lean();
 
-        //? restar unidades de cada stock y agregar buyers
-        productUpdater(target.products, newOrder);
+        const userFound = await User.findById(newOrder.user);
 
-        const userFound = await user.findById(newOrder.user);
+        //? restar unidades de cada stock y agregar buyers
+        productUpdater(target.products, newOrder, userFound);
 
         const {
           _id,

@@ -1,14 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    getHistory,
-    getSuggestion,
-    postVisited,
-    postSearch,
+  getHistory,
+  getSuggestion,
+  postVisited,
+  postSearch,
 } = require("../controllers/history.ctrl.js");
-const {
-    verifyToken,
-} = require("../middlewares/verify");
+const { verifyToken } = require("../middlewares/verify");
 
 router.get("/", verifyToken, getHistory);
 router.post("/suggestion", getSuggestion);

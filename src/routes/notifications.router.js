@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    getUserNotifications,
-    deleteNotification,
-    markAsSeen,
-    post
+  getUserNotifications,
+  deleteNotification,
+  markAsSeen,
+  post,
 } = require("../controllers/notifications.ctrl.js");
 
 router.get("/", getUserNotifications);

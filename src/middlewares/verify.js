@@ -52,6 +52,8 @@ async function verifyToken(req, res, next) {
         if (!userFound) {
           return res.status(404).json({ message: "Cuenta no encontrada" });
         }
+
+        req.user.role = userFound.role;
       } catch (error) {
         if (error.name === "TokenExpiredError")
           return res.status(403).json({
