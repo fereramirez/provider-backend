@@ -30,8 +30,6 @@ const productUpdater = async (products, order, buyer) => {
     price: e.price,
   }));
 
-  console.log("----------buyer", buyer);
-
   for (const prod of list) {
     let { id, amount, price } = prod;
 
@@ -48,15 +46,11 @@ const productUpdater = async (products, order, buyer) => {
 
       const publicationFound = await Publication.findOne({ product: id });
 
-      console.log("-------publicationFound", publicationFound);
-
       if (publicationFound.sales) {
         publicationFound.sales.push({
           buyer: {
             name: buyer.name,
-            email: userFound.isGoogleUser
-              ? userFound.googleEmail
-              : userFound.email,
+            email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
           },
           quantity: amount,
           price,
@@ -114,8 +108,6 @@ const notificationStripe = async (req, res, next) => {
         .lean();
 
       const userFound = await User.findById(newOrder.user);
-
-      console.log("----------userFound", userFound);
 
       //? restar unidades de cada stock y agregar buyers
       productUpdater(target.products, newOrder, userFound);
