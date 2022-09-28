@@ -1,4 +1,4 @@
-const Notifications = require("../models/Notifications");
+/* const Notifications = require("../models/Notifications");
 
 const getUserNotifications = async (req, res, next) => {
     try {
@@ -140,4 +140,4 @@ module.exports = {
     deleteNotification,
     markAsSeen,
     post
-}
+} */

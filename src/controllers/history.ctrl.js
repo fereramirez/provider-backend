@@ -4,46 +4,46 @@ const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { meliSearchParser } = require("../utils/meliParser");
 
 const getHistory = async (req, res, next) => {
-    try {
-        let message = false;
-        const history = await History.findOne({ user: req.user._id });
+  try {
+    let message = false;
+    const history = await History.findOne({ user: req.user._id });
 
-        if (!history) {
-            await History.create({
-                products: [],
-                last_category: "",
-                last_search: "",
-                user: req.user._id,
-            });
-            return res.json({ message: "Historial creado", products: [] });
-        }
-
-        let promises = [];
-        history.products.map((e) => promises.push(rawIdProductGetter(e)));
-        const rawProds = await Promise.allSettled(promises);
-
-        let response = [];
-        let new_id_list = [];
-        rawProds.forEach((e) => {
-            if (e.value._id) {
-                response.push(e.value);
-                new_id_list.push(e.value._id);
-            }
-        });
-
-        if (history.products.length !== new_id_list.length) {
-            history.products = new_id_list;
-            await history.save();
-            message = "Algunos productos no están disponibles";
-        }
-
-        return res.json({ products: response, message });
-    } catch (error) {
-        next(error);
+    if (!history) {
+      await History.create({
+        products: [],
+        last_category: "",
+        last_search: "",
+        user: req.user._id,
+      });
+      return res.json({ message: "Historial creado", products: [] });
     }
+
+    let promises = [];
+    history.products.map((e) => promises.push(rawIdProductGetter(e)));
+    const rawProds = await Promise.allSettled(promises);
+
+    let response = [];
+    let new_id_list = [];
+    rawProds.forEach((e) => {
+      if (e.value._id) {
+        response.push(e.value);
+        new_id_list.push(e.value._id);
+      }
+    });
+
+    if (history.products.length !== new_id_list.length) {
+      history.products = new_id_list;
+      await history.save();
+      message = "Algunos productos no están disponibles";
+    }
+
+    return res.json({ products: response, message });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getSuggestion = async (req, res, next) => {
+/* const getSuggestion = async (req, res, next) => {
     try {
         let meliCates = ["MLA1051", "MLA1648", "MLA1276", "MLA5726", "MLA1039"],
             searchParam = `category=${meliCates[Math.round(Math.random() * 5)]}`;
@@ -176,11 +176,11 @@ const postSearch = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
+}; */
 
 module.exports = {
-    getHistory,
-    getSuggestion,
+  getHistory,
+  /*     getSuggestion,
     postVisited,
-    postSearch,
+    postSearch, */
 };
