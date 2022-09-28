@@ -61,12 +61,7 @@ orderSchema.virtual("description").get(function () {
 orderSchema.pre('save', async function (next) {
     // convertir la zonahoraria a -3 (-10800000) ?
     // 36hrs de expiración para MP (259200000) (stripe no acepta mas de 24hr)
-
-    // este campo se crea solo ???
     this.created_at = Date.now();
-
-    //! volver a ver: POST deploy del front, revisar si Date.now() funciona bien, sino usar new Date().getTime()
-    // ! debería funcionar pero... REVISAR REVISAR
 
     this.expiration_date_from = new Date(Date.now() - 10800000).toISOString().slice(0, -1) + '-03:00';
     this.expiration_date_to = new Date(Date.now() + 248400000).toISOString().slice(0, -1) + '-03:00';
