@@ -14,7 +14,10 @@ const PublicationSchema = new Schema(
     publication_date: String,
     sales: [
       {
-        buyer: String,
+        buyer: {
+          name: String,
+          email: String,
+        },
         quantity: Number,
         price: Number,
         payment_date: String,

@@ -358,6 +358,28 @@ const getPublications = async (req, res, next) => {
     if (!userPublications)
       return res.json({ message: "No se encontraron publicaciones" });
 
+    /* 
+    for (const publication of userPublications) {
+      if (publication.sales.length) {
+        for (const sale of publication.sales) {
+          const userFound = await User.findById(sale.buyer);
+          sale.buyer = {
+            email: userFound.isGoogleUser
+              ? userFound.googleEmail
+              : userFound.email,
+            name: userFound.name,
+          };
+        }
+      }
+    }
+
+    for (const publication of userPublications) {
+      for (const sale of publication.sales) {
+        console.log("--------sale", sale.buyer);
+      }
+    } */
+    console.log("------userPublications", userPublications);
+
     return res.json(userPublications);
   } catch (error) {
     next(error);
