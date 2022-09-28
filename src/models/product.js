@@ -87,10 +87,10 @@ const productSchema = new Schema(
         calification: Number,
       },
     ],
-    /* active: {
+    active: {
       type: Boolean,
       default: true,
-    }, */
+    },
   },
   {
     versionKey: false,
