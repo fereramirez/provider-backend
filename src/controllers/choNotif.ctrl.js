@@ -115,6 +115,8 @@ const notificationStripe = async (req, res, next) => {
 
       const userFound = await User.findById(newOrder.user);
 
+      console.log("----------userFound", userFound);
+
       //? restar unidades de cada stock y agregar buyers
       productUpdater(target.products, newOrder, userFound);
 
