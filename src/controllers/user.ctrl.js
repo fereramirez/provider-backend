@@ -154,27 +154,6 @@ const profile = async (req, res, next) => {
   }
 };
 
-/* const sendVerifyEmail = async (req, res, next) => {
-  const { _id } = req.user;
-  if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
-
-  try {
-    const userFound = await User.findById(_id);
-
-    if (!userFound)
-      return res.status(404).json({ message: "Cuenta no encontrada" });
-    if (userFound.emailVerified)
-      return res.status(400).json({ message: "Email ya verificado" });
-
-    userFound.emailVerified = true;
-    await userFound.save();
-
-    return res.json({ message: "Email verificado con éxito" });
-  } catch (error) {
-    next(error);
-  }
-}; */
-
 const verifyEmail = async (req, res, next) => {
   const { _id } = req.user;
   if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
@@ -368,7 +347,7 @@ const setAvatar = async (req, res, next) => {
   }
 };
 
-/* const getPublications = async (req, res, next) => {
+const getPublications = async (req, res, next) => {
   try {
     const userPublications = await Publication.find({
       owner: req.user._id,
@@ -383,7 +362,7 @@ const setAvatar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}; */
+};
 
 module.exports = {
   signin,
@@ -397,5 +376,5 @@ module.exports = {
   updatePassword,
   editProfile,
   setAvatar,
-  //getPublications,
+  getPublications,
 };

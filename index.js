@@ -1,6 +1,5 @@
 const app = require("./src/app.js");
 const PORT = process.env.PORT || 4000;
-console.log("PORT", PORT);
 const {
   salesChecker,
   flashSales,

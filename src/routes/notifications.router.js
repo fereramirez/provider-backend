@@ -1,7 +1,7 @@
-/* const { Router } = require("express");
+const { Router } = require("express");
 const router = Router();
 const {
-    getUserNotifications,
+  getUserNotifications,
   deleteNotification,
   markAsSeen,
   post,
@@ -13,4 +13,3 @@ router.delete("/:id", deleteNotification);
 router.post("/:id", post);
 
 module.exports = router;
- */

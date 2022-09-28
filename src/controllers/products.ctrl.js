@@ -319,7 +319,7 @@ const createProduct = async (req, res, next) => {
     });
     const productSaved = await newProduct.save();
 
-    /* const newPublication = new Publication({
+    const newPublication = new Publication({
       owner:
         req.user.role === "admin" || req.user.role === "superadmin"
           ? "PROVIDER"
@@ -331,7 +331,7 @@ const createProduct = async (req, res, next) => {
         })
       ),
     });
-    await newPublication.save(); */
+    await newPublication.save();
 
     res.json(productSaved);
   } catch (error) {
@@ -514,60 +514,60 @@ const removeDiscount = async (req, res, next) => {
   }
 };
 
-// const reactivateProduct = async (req, res, next) => {
-//   try {
-//     const productFound = await Product.findById(req.params.id);
-//     if (!productFound)
-//       return res.status(404).json({ message: "Producto no encontrado" });
-//     if (
-//       productFound.seller !== req.user._id &&
-//       req.user.role !== "admin" &&
-//       req.user.role !== "superadmin"
-//     )
-//       return res.status(401).json({ message: "Sin autorización" });
+const reactivateProduct = async (req, res, next) => {
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Producto no encontrado" });
+    if (
+      productFound.seller !== req.user._id &&
+      req.user.role !== "admin" &&
+      req.user.role !== "superadmin"
+    )
+      return res.status(401).json({ message: "Sin autorización" });
 
-//     await Product.findByIdAndUpdate(req.params.id, { active: true });
-//     return res.json({
-//       message: "Producto reactivado exitosamente",
-//       type: "success",
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    await Product.findByIdAndUpdate(req.params.id, { active: true });
+    return res.json({
+      message: "Producto reactivado exitosamente",
+      type: "success",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-// const deleteProduct = async (req, res, next) => {
-//   try {
-//     const productFound = await Product.findById(req.params.id);
-//     if (!productFound)
-//       return res.status(404).json({ message: "Producto no encontrado" });
-//     if (
-//       productFound.seller !== req.user._id &&
-//       req.user.role !== "admin" &&
-//       req.user.role !== "superadmin"
-//     )
-//       return res.status(401).json({ message: "Sin autorización" });
+const deleteProduct = async (req, res, next) => {
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Producto no encontrado" });
+    if (
+      productFound.seller !== req.user._id &&
+      req.user.role !== "admin" &&
+      req.user.role !== "superadmin"
+    )
+      return res.status(401).json({ message: "Sin autorización" });
 
-//     if (productFound.undeletable) {
-//       return res.json({
-//         message: "Producto protegido. Imposible eliminar",
-//         type: "warning",
-//       });
-//     } else {
-//       /*         let deleteList = [];
-//       productFound.images.forEach((img) => deleteList.push(img.public_id));
-//       cloudinary.api.delete_resources(deleteList); */
+    if (productFound.undeletable) {
+      return res.json({
+        message: "Producto protegido. Imposible eliminar",
+        type: "warning",
+      });
+    } else {
+      /*         let deleteList = [];
+      productFound.images.forEach((img) => deleteList.push(img.public_id));
+      cloudinary.api.delete_resources(deleteList); */
 
-//       await Product.findByIdAndUpdate(req.params.id, { active: false });
-//       return res.json({
-//         message: "Publicación pausada exitosamente",
-//         type: "success",
-//       });
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+      await Product.findByIdAndUpdate(req.params.id, { active: false });
+      return res.json({
+        message: "Publicación pausada exitosamente",
+        type: "success",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAll,
@@ -582,6 +582,6 @@ module.exports = {
   updateProduct,
   setDiscount,
   removeDiscount,
-  //deleteProduct,
-  //reactivateProduct,
+  deleteProduct,
+  reactivateProduct,
 };
