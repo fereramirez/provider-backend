@@ -348,6 +348,7 @@ const setAvatar = async (req, res, next) => {
 };
 
 const getPublications = async (req, res, next) => {
+  console.log("----------entra");
   try {
     const userPublications = await Publication.find({
       owner: req.user._id,
@@ -355,33 +356,46 @@ const getPublications = async (req, res, next) => {
       .populate("product")
       .exec();
 
+    console.log("----------1");
     if (!userPublications)
       return res.json({ message: "No se encontraron publicaciones" });
 
-    /* 
+    let userSales = [];
+    console.log("----------2");
+
     for (const publication of userPublications) {
       if (publication.sales.length) {
         for (const sale of publication.sales) {
-          const userFound = await User.findById(sale.buyer);
-          sale.buyer = {
-            email: userFound.isGoogleUser
-              ? userFound.googleEmail
-              : userFound.email,
-            name: userFound.name,
-          };
+          const userFound = await User.findById(sale.buyer._id);
+          userSales.push({
+            buyer: {
+              _id: userFound._id,
+              email: userFound.isGoogleUser
+                ? userFound.googleEmail
+                : userFound.email,
+              name: userFound.name,
+            },
+            product: publication.product,
+          });
         }
       }
     }
+    console.log("----------3");
 
     for (const publication of userPublications) {
       for (const sale of publication.sales) {
-        console.log("--------sale", sale.buyer);
+        console.log("--------sale", sale);
       }
-    } */
-    console.log("------userPublications", userPublications);
+    }
+    console.log("----------4");
+    /*  console.log("------userPublications", userPublications); */
 
-    return res.json(userPublications);
+    return res.json({
+      publications: userPublications,
+      sales: userSales?.length ? userSales : [],
+    });
   } catch (error) {
+    console.log("----------error", error);
     next(error);
   }
 };

@@ -15,6 +15,7 @@ const PublicationSchema = new Schema(
     sales: [
       {
         buyer: {
+          _id: String,
           name: String,
           email: String,
         },

@@ -49,6 +49,7 @@ const productUpdater = async (products, order, buyer) => {
       if (publicationFound.sales) {
         publicationFound.sales.push({
           buyer: {
+            _id: buyer._id,
             name: buyer.name,
             email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
           },
