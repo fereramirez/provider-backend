@@ -1,4 +1,4 @@
-const { Router } = require("express");
+/* const { Router } = require("express");
 const router = Router();
 const {
     getSales,
@@ -12,4 +12,4 @@ router.get("/set_new_sales", setNewSales);
 router.get("/undeletable", undeletable);
 router.delete("/", resetSales);
 
-module.exports = router;
+module.exports = router; */

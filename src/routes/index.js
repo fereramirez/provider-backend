@@ -9,7 +9,7 @@ const orderRouter = require("./order.router");
 const historyRouter = require("./history.router");
 const stripeRouter = require("./stripe.router");
 const mpRouter = require("./mercadopago.router");
-const salesRouter = require("./sales.router");
+//const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const choNotif = require("./choNotif.router");
 const commentsRouter = require("./comments.router");
@@ -31,7 +31,7 @@ router.use("/history", historyRouter);
 router.use("/product", addHeaderIfLogged, productsRouter);
 router.use("/comments", verifyToken, commentsRouter);
 //router.use("/notifications", verifyToken, notificationsRouter);
-router.use("/sales", salesRouter);
+//router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
 
