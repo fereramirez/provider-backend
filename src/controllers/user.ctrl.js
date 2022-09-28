@@ -368,7 +368,7 @@ const setAvatar = async (req, res, next) => {
   }
 };
 
-const getPublications = async (req, res, next) => {
+/* const getPublications = async (req, res, next) => {
   try {
     const userPublications = await Publication.find({
       owner: req.user._id,
@@ -383,7 +383,7 @@ const getPublications = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+}; */
 
 module.exports = {
   signin,
@@ -397,5 +397,5 @@ module.exports = {
   updatePassword,
   editProfile,
   setAvatar,
-  getPublications,
+  //getPublications,
 };

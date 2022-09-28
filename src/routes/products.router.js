@@ -13,8 +13,8 @@ const {
   updateProduct,
   setDiscount,
   removeDiscount,
-  deleteProduct,
-  reactivateProduct,
+  // deleteProduct,
+  //reactivateProduct,
 } = require("../controllers/products.ctrl.js");
 const { verifyToken } = require("../middlewares/verify");
 
@@ -31,7 +31,7 @@ router.post("/", verifyToken, createProduct);
 router.put("/:id", verifyToken, updateProduct);
 router.put("/discount/:id", verifyToken, setDiscount);
 router.delete("/discount/:id", verifyToken, removeDiscount);
-router.delete("/:id", verifyToken, deleteProduct);
-router.post("/:id", verifyToken, reactivateProduct);
+//router.delete("/:id", verifyToken, deleteProduct);
+//router.post("/:id", verifyToken, reactivateProduct);
 
 module.exports = router;
