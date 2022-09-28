@@ -13,12 +13,12 @@ const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const choNotif = require("./choNotif.router");
 const commentsRouter = require("./comments.router");
-const notificationsRouter = require("./notifications.router");
+//const notificationsRouter = require("./notifications.router");
 const {
-    verifyToken,
-    verifyAdmin,
-    googleUserShallNotPass,
-    addHeaderIfLogged
+  verifyToken,
+  verifyAdmin,
+  googleUserShallNotPass,
+  addHeaderIfLogged,
 } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
@@ -30,16 +30,16 @@ router.use("/address", verifyToken, addressRouter);
 router.use("/history", historyRouter);
 router.use("/product", addHeaderIfLogged, productsRouter);
 router.use("/comments", verifyToken, commentsRouter);
-router.use("/notifications", verifyToken, notificationsRouter);
+//router.use("/notifications", verifyToken, notificationsRouter);
 router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
 
 /* //! VOLVER A VER descomentar lo de abajo */
 router.use(
-    "/admin",
-    [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
-    adminRouter
+  "/admin",
+  [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
+  adminRouter
 );
 
 module.exports = router;
