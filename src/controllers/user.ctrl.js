@@ -139,7 +139,7 @@ const profile = async (req, res, next) => {
     let wish = wishFound?.products || [];
 
     const notifFound = await Notifications.findOne({ user_id: userId });
-    let notif = notifFound || [];
+    let notif = notifFound?.notif_list || [];
 
     let aux = {
       user,
@@ -325,14 +325,14 @@ const editProfile = async (req, res, next) => {
     const { username, firstname, lastname } = req.body;
 
     /* const userFound = await User.findByIdAndUpdate(
-                          req.user._id,
-                          {
-                            username: username || userFound.username,
-                            firstName: firstname || userFound.firstName,
-                            lastName: lastname || userFound.lastName,
-                          },
-                          { new: true }
-                        ); */
+                              req.user._id,
+                              {
+                                username: username || userFound.username,
+                                firstName: firstname || userFound.firstName,
+                                lastName: lastname || userFound.lastName,
+                              },
+                              { new: true }
+                            ); */
 
     const userFound = await User.findById(req.user._id);
 
