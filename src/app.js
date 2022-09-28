@@ -37,37 +37,33 @@ const app = express();
 
 // ---------------- MIDDLEWARES
 const options = {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
 };
 
 let mongoConnected = null;
 
 const mongoConn = async (req, res, next) => {
-    try {
-        if (mongoConnected) {
-            return mongoConnected;
-        }
-        return mongoose.connect(
-            DB_URL,
-            options,
-            (err) => {
-                if (err) console.log(err);
-                else {
-                    mongoConnected = true;
-                    console.log("MongDB connected")
-                };
-            }
-        );
-    } catch (error) {
-        console.log(error)
-    } finally {
-        mongoConnected
-            ? next()
-            : setTimeout(() => {
-                next()
-            }, 5000);
+  try {
+    if (mongoConnected) {
+      return mongoConnected;
     }
+    return mongoose.connect(DB_URL, options, (err) => {
+      if (err) console.log(err);
+      else {
+        mongoConnected = true;
+        console.log("MongDB connected");
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    mongoConnected
+      ? next()
+      : setTimeout(() => {
+          next();
+        }, 5000);
+  }
 };
 
 app.use(cors());
@@ -80,7 +76,7 @@ app.use(morgan("dev"));
 
 app.use(cookieParser());
 
-app.use('/', mongoConn);
+app.use("/", mongoConn);
 
 app.use(mongoSanitize());
 
@@ -88,14 +84,15 @@ app.use("/", router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
-    const status = err.status || 500;
-    const message = err.message || err;
+  const status = err.status || 500;
+  const message = err.message || err;
 
-    return res.status(status).send(message);
+  console.log("errorrrrr", err);
+
+  return res.status(status).send(message);
 });
 app.get("/", (req, res) => {
-    res.send('Welcome to Provider API');
+  res.send("Welcome to Provider API");
 });
-
 
 module.exports = app;
