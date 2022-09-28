@@ -30,6 +30,8 @@ const productUpdater = async (products, order, buyer) => {
     price: e.price,
   }));
 
+  console.log("----------buyer", buyer);
+
   for (const prod of list) {
     let { id, amount, price } = prod;
 
