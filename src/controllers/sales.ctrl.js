@@ -3,6 +3,8 @@ const Product = require("../models/product");
 const Sales = require("../models/Sales");
 const { salesMaker, imgUrlChanger } = require("../jobs/salesMaker");
 const publication = require("../models/publication");
+const order = require("../models/order");
+const Notifications = require("../models/Notifications");
 
 const getSales = async (req, res, next) => {
     try {
@@ -36,8 +38,8 @@ const getSales = async (req, res, next) => {
 
 const setNewSales = async (req, res, next) => {
     try {
-        const allprod = await Product.find({})
-        let allIds = allprod.map(p => p._id)
+        // const allprod = await Product.find({});
+        // let allIds = allprod.map(p => p._id);
 
         // allIds.forEach(id => {
         //     publication.create(
@@ -50,7 +52,7 @@ const setNewSales = async (req, res, next) => {
         //     )
         // })
         // const response = await salesMaker();
-        return res.json(allIds);
+        return res.json('setNewSales');
     } catch (error) {
         next(error);
     }
