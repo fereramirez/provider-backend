@@ -2,6 +2,7 @@ const axios = require("axios");
 const Product = require("../models/product");
 const Sales = require("../models/Sales");
 const { salesMaker, imgUrlChanger } = require("../jobs/salesMaker");
+const publication = require("../models/publication");
 
 const getSales = async (req, res, next) => {
     try {
@@ -35,8 +36,21 @@ const getSales = async (req, res, next) => {
 
 const setNewSales = async (req, res, next) => {
     try {
-        const response = await salesMaker();
-        return res.json(response);
+        const allprod = await Product.find({})
+        let allIds = allprod.map(p => p._id)
+
+        // allIds.forEach(id => {
+        //     publication.create(
+        //         {
+        //             owner: 'PROVIDER',
+        //             product: id,
+        //             publication_date: Date.now(),
+        //             sales: []
+        //         }
+        //     )
+        // })
+        // const response = await salesMaker();
+        return res.json(allIds);
     } catch (error) {
         next(error);
     }
