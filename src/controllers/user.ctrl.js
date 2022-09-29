@@ -348,7 +348,6 @@ const setAvatar = async (req, res, next) => {
 };
 
 const getPublications = async (req, res, next) => {
-  console.log("----------entra");
   try {
     const userPublications = await Publication.find({
       owner: req.user._id,
@@ -356,12 +355,10 @@ const getPublications = async (req, res, next) => {
       .populate("product")
       .exec();
 
-    console.log("----------1");
     if (!userPublications)
       return res.json({ message: "No se encontraron publicaciones" });
 
     let userSales = [];
-    console.log("----------2");
 
     for (const publication of userPublications) {
       if (publication.sales.length) {
@@ -373,29 +370,26 @@ const getPublications = async (req, res, next) => {
               email: userFound.isGoogleUser
                 ? userFound.googleEmail
                 : userFound.email,
-              name: userFound.name,
+              name:
+                userFound.firstName && userFound.lastName
+                  ? `${userFound.firstName} ${userFound.lastName}`
+                  : userFound.name,
             },
             product: publication.product,
+            quantity: sale.quantity,
+            price: sale.price,
+            payment_date: sale.payment_date,
+            delivery_date: sale.delivery_date,
           });
         }
       }
     }
-    console.log("----------3");
-
-    for (const publication of userPublications) {
-      for (const sale of publication.sales) {
-        console.log("--------sale", sale);
-      }
-    }
-    console.log("----------4");
-    /*  console.log("------userPublications", userPublications); */
 
     return res.json({
       publications: userPublications,
       sales: userSales?.length ? userSales : [],
     });
   } catch (error) {
-    console.log("----------error", error);
     next(error);
   }
 };

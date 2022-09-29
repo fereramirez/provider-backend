@@ -86,9 +86,6 @@ require("./config/auth");
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || err;
-
-  // console.log("errorrrrr", err);
-
   return res.status(status).send(message);
 });
 app.get("/", (req, res) => {
