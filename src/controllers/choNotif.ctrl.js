@@ -79,7 +79,7 @@ const productUpdater = async (products, order, buyer) => {
             await publicationFound.save();
 
             //? NOTIFICATIONS
-            const notif = await Notifications.findOne({ user_id: USER_ID });
+            const notif = await Notifications.findOne({ user_id: prod.seller });
             if (notif) {
                 notif.notif_list.push({
                     notif_type: 'success',
