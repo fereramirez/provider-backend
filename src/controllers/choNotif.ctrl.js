@@ -81,6 +81,19 @@ const productUpdater = async (products, order, buyer) => {
             //? NOTIFICATIONS
             const notif = await Notifications.findOne({ user_id: prod.seller });
             if (notif) {
+                // NO STOCK ON PUCLICATION
+                if ((prod.available_quantity -= amount) < 1) {
+                    notif.notif_list.push({
+                        notif_type: 'warning',
+                        title: `¡Has vendido todo!`,
+                        description: `¡Felicitaciones! Has vendido toda las existencias de tu publicación "${prod.name}". Esta ya no será mostrada en los resultados de busqueda hasta que se reponga el stock.`,
+                        link: `/profile/products`,
+                        date: new Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }),
+                        seen: false
+                    })
+                }
+
+                // SELL
                 notif.notif_list.push({
                     notif_type: 'success',
                     title: `Haz concretado una venta`,
@@ -89,8 +102,10 @@ const productUpdater = async (products, order, buyer) => {
                     date: new Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }),
                     seen: false
                 })
+
                 await notif.save();
             }
+
 
         }
     }
