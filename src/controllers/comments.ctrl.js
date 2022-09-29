@@ -1,3 +1,4 @@
+const Notifications = require("../models/Notifications");
 const product = require("../models/product");
 const commentsParser = require("../utils/commentsParser");
 
@@ -40,10 +41,25 @@ const postComment = async (req, res, next) => {
             { new: true }
         );
 
+        //? enviar notificación al vendedor
+        if (newProd.seller !== 'PROVIDER') {
+            const notif = await Notifications.findOne({ user_id: newProd.seller });
+            if (notif) {
+                notif.notif_list.push({
+                    notif_type: 'success',
+                    title: `Tu publicación ha recibido una reseña`,
+                    description: `Un usuario a calificado tu producton con ${calification} ${calification > 1 ? 'estrellas.' : 'estrella.'} ${calification === 5 && '¡Felicitaciones!'}`,
+                    link: `/details/${product_id}`,
+                    date: new Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }),
+                    seen: false
+                })
+                await notif.save();
+            }
+        }
+
+        //? responder con id del comentario
         const newComment = newProd.comments.find(c => c.user_id === userId.toString())
-        console.log(newComment);
         const new_id = newComment?._id.toString();
-        console.log(new_id);
 
         if (newProd) return res.json({ message: 'Comentario publicado', new_id })
         else return res.json({ error: true, message: 'Algo salió mal' })
