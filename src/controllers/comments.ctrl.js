@@ -42,11 +42,8 @@ const postComment = async (req, res, next) => {
         );
 
         //? enviar notificación al vendedor
-        console.log('Seller: ' + newProd.seller);
         if (newProd.seller !== 'PROVIDER') {
             const notif = await Notifications.findOne({ user_id: newProd.seller });
-            console.log('notification: ');
-            console.log(notif);
             if (notif) {
                 notif.notif_list.push({
                     notif_type: 'success',
