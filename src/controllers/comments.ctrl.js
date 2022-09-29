@@ -1,3 +1,4 @@
+const Notifications = require("../models/Notifications");
 const product = require("../models/product");
 const commentsParser = require("../utils/commentsParser");
 
