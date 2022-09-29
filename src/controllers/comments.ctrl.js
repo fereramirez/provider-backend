@@ -42,13 +42,16 @@ const postComment = async (req, res, next) => {
         );
 
         //? enviar notificación al vendedor
+        console.log('Seller: ' + newProd.seller);
         if (newProd.seller !== 'PROVIDER') {
             const notif = await Notifications.findOne({ user_id: newProd.seller });
+            console.log('notification: ');
+            console.log(notif);
             if (notif) {
                 notif.notif_list.push({
                     notif_type: 'success',
-                    title: `Tu publicación ha recibido una reseña`,
-                    description: `Un usuario a calificado tu producton con ${calification} ${calification > 1 ? 'estrellas.' : 'estrella.'} ${calification === 5 && '¡Felicitaciones!'}`,
+                    title: `Has recibido una reseña`,
+                    description: `Un usuario a calificado tu producto con ${calification} ${calification > 1 ? 'estrellas.' : 'estrella.'} ${calification === 5 ? '¡Felicitaciones!' : ''}`,
                     link: `/details/${product_id}`,
                     date: new Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }),
                     seen: false
