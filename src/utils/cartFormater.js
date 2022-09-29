@@ -41,7 +41,7 @@ const cartFormater = async (cart) => {
     }
 
     data.forEach(p => {
-        if (p.status === 'fulfilled') {
+        if (p.status === 'fulfilled' && p.value.available_quantity > 0) {
             products.push({
                 _id: p.value._id.toString(),
                 name: p.value.name,

@@ -6,7 +6,6 @@ const stripe = require("stripe")(STRIPE_SKEY);
 
 const create = async (req, res, next) => {
     try {
-        console.log();
         const orderId = req.params.id;
 
         const YOUR_DOMAIN = `https://providerstore.vercel.app/orders/post-sale?external_reference=${orderId}`;
