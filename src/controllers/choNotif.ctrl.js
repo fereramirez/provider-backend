@@ -38,14 +38,12 @@ const productUpdater = async (products, order, buyer) => {
       const prod = await product.findById(id);
 
       //? STOCK
-      console.log("antes prod.available_quantity", prod.available_quantity);
       prod.available_quantity -= amount;
 
       //? BUYERS
       !prod.buyers.includes(user_id) && prod.buyers.push(user_id);
 
       if (prod.available_quantity < 1) prod.active = false;
-      console.log("despues prod.available_quantity", prod.available_quantity);
 
       await prod.save();
 
