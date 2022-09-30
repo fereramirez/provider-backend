@@ -345,7 +345,7 @@ const updateProduct = async (req, res, next) => {
     if (!productFound)
       return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
-      productFound.seller !== req.user._id &&
+      productFound.seller !== req.user._id.toString() &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
@@ -438,10 +438,12 @@ const setDiscount = async (req, res, next) => {
 
   try {
     const productFound = await Product.findById(req.params.id);
+
     if (!productFound)
       return res.json({ message: "Producto no encontrado", type: "warning" });
+
     if (
-      productFound.seller !== req.user._id &&
+      productFound.seller !== req.user._id.toString() &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
@@ -465,10 +467,14 @@ const setDiscount = async (req, res, next) => {
     }
 
     const autoSales = await Sales.find();
-    if (!autoSales)
-      return res.json({ message: "Oferta no encontrada", type: "warning" });
+    /* if (!autoSales)
+      return res.json({ message: "Oferta no encontrada", type: "warning" }); */
 
-    if (autoSales[0].products.includes(req.params.id))
+    if (
+      autoSales &&
+      autoSales.length &&
+      autoSales[0].products.includes(req.params.id)
+    )
       return res.json({
         message: "No puedes modificar el descuento de este producto",
         type: "warning",
@@ -478,7 +484,6 @@ const setDiscount = async (req, res, next) => {
       productFound.discount = parseInt(number);
     } else {
       const discount = (parseInt(number) * 100) / productFound.price;
-
       productFound.discount = discount;
     }
 
@@ -499,17 +504,21 @@ const removeDiscount = async (req, res, next) => {
     if (!productFound)
       return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
-      productFound.seller !== req.user._id &&
+      productFound.seller !== req.user._id.toString() &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
       return res.json({ message: "Sin autorización", type: "warning" });
 
     const autoSales = await Sales.find();
-    if (!autoSales)
-      return res.json({ message: "Oferta no encontrada", type: "warning" });
+    /* if (!autoSales)
+      return res.json({ message: "Oferta no encontrada", type: "warning" }); */
 
-    if (autoSales[0].products.includes(req.params.id))
+    if (
+      autoSales &&
+      autoSales.length &&
+      autoSales[0].products.includes(req.params.id)
+    )
       return res.json({
         message: "No puedes remover el descuento de este producto",
         type: "warning",
@@ -518,7 +527,10 @@ const removeDiscount = async (req, res, next) => {
     productFound.discount = 0;
     productFound.on_sale = false;
     await productFound.save();
-    return res.json({ message: "Oferta removida", type: "success" });
+    return res.json({
+      message: "Descuento removido con éxito",
+      type: "success",
+    });
   } catch (error) {
     next(error);
   }
@@ -530,7 +542,7 @@ const deleteProduct = async (req, res, next) => {
     if (!productFound)
       return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
-      productFound.seller !== req.user._id &&
+      productFound.seller !== req.user._id.toString() &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
@@ -548,7 +560,7 @@ const deleteProduct = async (req, res, next) => {
 
       await Product.findByIdAndUpdate(req.params.id, { active: false });
       return res.json({
-        message: "Publicación pausada exitosamente",
+        message: "Publicación pausada con éxito",
         type: "success",
       });
     }
@@ -563,7 +575,7 @@ const reactivateProduct = async (req, res, next) => {
     if (!productFound)
       return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
-      productFound.seller !== req.user._id &&
+      productFound.seller !== req.user._id.toString() &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
@@ -577,7 +589,7 @@ const reactivateProduct = async (req, res, next) => {
 
     await Product.findByIdAndUpdate(req.params.id, { active: true });
     return res.json({
-      message: "Publicación reactivada exitosamente",
+      message: "Publicación reactivada con éxito",
       type: "success",
     });
   } catch (error) {
