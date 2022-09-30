@@ -343,13 +343,13 @@ const updateProduct = async (req, res, next) => {
   try {
     const productFound = await Product.findById(req.params.id);
     if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
       productFound.seller !== req.user._id &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
-      return res.status(401).json({ message: "Sin autorización" });
+      return res.json({ message: "Sin autorización", type: "warning" });
 
     let {
       name,
@@ -439,33 +439,39 @@ const setDiscount = async (req, res, next) => {
   try {
     const productFound = await Product.findById(req.params.id);
     if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
       productFound.seller !== req.user._id &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
-      return res.status(401).json({ message: "Sin autorización" });
+      return res.json({ message: "Sin autorización", type: "warning" });
 
     if (!type)
-      return res.status(400).json({ message: "Tipo de descuento no recibido" });
+      return res.json({
+        message: "Tipo de descuento no recibido",
+        type: "warning",
+      });
     if (!number)
-      return res
-        .status(400)
-        .json({ message: "Número de descuento no recibido" });
+      return res.json({
+        message: "Número de descuento no recibido",
+        type: "warning",
+      });
     if (type !== "percent" && type !== "fixed") {
-      return res
-        .status(400)
-        .json({ message: "Tipo de descuento no soportado" });
+      return res.json({
+        message: "Tipo de descuento no soportado",
+        type: "warning",
+      });
     }
 
     const autoSales = await Sales.find();
     if (!autoSales)
-      return res.status(404).json({ message: "Oferta no encontrada" });
+      return res.json({ message: "Oferta no encontrada", type: "warning" });
 
     if (autoSales[0].products.includes(req.params.id))
-      return res.status(401).json({
+      return res.json({
         message: "No puedes modificar el descuento de este producto",
+        type: "warning",
       });
 
     if (type === "percent") {
@@ -478,7 +484,10 @@ const setDiscount = async (req, res, next) => {
 
     productFound.on_sale = true;
     await productFound.save();
-    return res.json({ message: "Descuento aplicado con éxito" });
+    return res.json({
+      message: "Descuento aplicado con éxito",
+      type: "success",
+    });
   } catch (error) {
     next(error);
   }
@@ -488,27 +497,28 @@ const removeDiscount = async (req, res, next) => {
   try {
     const productFound = await Product.findById(req.params.id);
     if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
       productFound.seller !== req.user._id &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
-      return res.status(401).json({ message: "Sin autorización" });
+      return res.json({ message: "Sin autorización", type: "warning" });
 
     const autoSales = await Sales.find();
     if (!autoSales)
-      return res.status(404).json({ message: "Oferta no encontrada" });
+      return res.json({ message: "Oferta no encontrada", type: "warning" });
 
     if (autoSales[0].products.includes(req.params.id))
-      return res.status(401).json({
+      return res.json({
         message: "No puedes remover el descuento de este producto",
+        type: "warning",
       });
 
     productFound.discount = 0;
     productFound.on_sale = false;
     await productFound.save();
-    return res.json({ message: "Oferta removida" });
+    return res.json({ message: "Oferta removida", type: "success" });
   } catch (error) {
     next(error);
   }
@@ -518,13 +528,13 @@ const deleteProduct = async (req, res, next) => {
   try {
     const productFound = await Product.findById(req.params.id);
     if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
       productFound.seller !== req.user._id &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
-      return res.status(401).json({ message: "Sin autorización" });
+      return res.json({ message: "Sin autorización", type: "warning" });
 
     if (productFound.undeletable) {
       return res.json({
@@ -551,13 +561,19 @@ const reactivateProduct = async (req, res, next) => {
   try {
     const productFound = await Product.findById(req.params.id);
     if (!productFound)
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.json({ message: "Producto no encontrado", type: "warning" });
     if (
       productFound.seller !== req.user._id &&
       req.user.role !== "admin" &&
       req.user.role !== "superadmin"
     )
-      return res.status(401).json({ message: "Sin autorización" });
+      return res.json({ message: "Sin autorización", type: "warning" });
+
+    if (productFound.available_quantity < 1)
+      return res.json({
+        message: "Repone stock para poder reactivar la publicación",
+        type: "warning",
+      });
 
     await Product.findByIdAndUpdate(req.params.id, { active: true });
     return res.json({
