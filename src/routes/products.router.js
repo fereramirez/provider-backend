@@ -1,20 +1,21 @@
 const { Router } = require("express");
 const router = Router();
 const {
-  getAll,
-  getProds,
-  getByQuery,
-  getById,
-  stock,
-  getPromos,
-  getPremium,
-  putPremium,
-  createProduct,
-  updateProduct,
-  setDiscount,
-  removeDiscount,
-  deleteProduct,
-  reactivateProduct,
+    getAll,
+    getProds,
+    getByQuery,
+    getById,
+    stock,
+    getPromos,
+    getPremium,
+    putPremium,
+    createProduct,
+    updateProduct,
+    setDiscount,
+    removeDiscount,
+    deleteProduct,
+    reactivateProduct,
+    updateShipping
 } = require("../controllers/products.ctrl.js");
 const { verifyToken } = require("../middlewares/verify");
 
@@ -29,6 +30,7 @@ router.get("/:id", getById);
 
 router.post("/", verifyToken, createProduct);
 router.put("/:id", verifyToken, updateProduct);
+router.put("/shipping/:id", verifyToken, updateShipping);
 router.put("/discount/:id", verifyToken, setDiscount);
 router.delete("/discount/:id", verifyToken, removeDiscount);
 router.delete("/:id", verifyToken, deleteProduct);
