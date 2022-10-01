@@ -597,6 +597,26 @@ const reactivateProduct = async (req, res, next) => {
     }
 };
 
+const updateShipping = async (req, res, next) => {
+    try {
+        const productFound = await Product.findById(req.params.id);
+
+        if (!productFound) return res.status(404).json({ message: "Producto no encontrado" });
+        if (productFound.seller !== req.user._id.toString() &&
+            (req.user.role !== "admin" ||
+                req.user.role !== "superadmin"))
+            return res.status(401).json({ message: "Sin autorización", type: 'warning' });
+
+        productFound.free_shipping = !productFound.free_shipping;
+        await productFound.save();
+
+        return res.json({ message: "Done", type: 'success', product: productFound });
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
+}
+
 module.exports = {
     getAll,
     getProds,
@@ -612,4 +632,5 @@ module.exports = {
     removeDiscount,
     deleteProduct,
     reactivateProduct,
+    updateShipping
 };
