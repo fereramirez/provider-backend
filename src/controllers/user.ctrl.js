@@ -43,7 +43,7 @@ const sendVerifyEmail = async (req, res, next) => {
 
     await sendEmail(
       email,
-      `${newUser ? "Bienvenido a Provider" : "Verificación de email"}`,
+      `${newUser ? "Bienvenida" : "Verificación de email"}`,
       `./templates/${newUser ? "signup" : "verifyEmail"}.html`,
       { link }
     );
@@ -64,7 +64,6 @@ const signin = async (req, res, next) => {
 
   passport.authenticate("signin", async (err, user, info) => {
     try {
-      console.log(err);
       if (err || !user) throw new Error(info.message);
       //const error = new Error(info);
       //return next(info);
@@ -75,7 +74,7 @@ const signin = async (req, res, next) => {
         const { _id, email, name, role, avatar, isGoogleUser } = user;
 
         if (role === "banned")
-          return res.status(401).json({ message: "Cuenta suspendida" });
+          return res.json({ message: "Cuenta suspendida", error: true });
 
         const body = { _id, email, role, isGoogleUser };
 
@@ -111,8 +110,12 @@ const signinGoogle = async (req, res, next) => {
         username: firstName || email.split("@")[0],
         isGoogleUser: true,
       });
+
       return res.json(newGoogleUser);
     } else {
+      if (userFound.role === "banned")
+        return res.json({ message: "Cuenta suspendida", error: true });
+
       return res.json({ name: userFound.name });
     }
   } catch (error) {

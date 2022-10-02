@@ -7,6 +7,7 @@ const Product = require("../models/product");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
+const Publication = require("../models/publication");
 const sendEmail = require("../utils/sendEmail");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
@@ -86,14 +87,17 @@ const getAllUsers = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
+  const { id } = req.params;
+
   try {
-    if (req.params.id.length !== 24) {
+    if (id.length !== 24) {
       return res.json({
         error: true,
         message: "Formato de ID incorrecto (solo se aceptan 24 caracteres)",
       });
     }
-    const userFound = await User.findById(req.params.id);
+
+    const userFound = await User.findById(id);
     if (!userFound) {
       return res.json({ error: true, message: "Cuenta no encontrada" });
     }
@@ -107,18 +111,50 @@ const getUser = async (req, res, next) => {
       googleEmail,
       avatar,
     } = userFound;
-    return res.json([
-      {
-        name,
-        email,
-        role,
-        emailVerified,
-        _id,
-        isGoogleUser,
-        googleEmail,
-        avatar: avatar || null,
-      },
-    ]);
+    const userData = {
+      name,
+      email,
+      role,
+      emailVerified,
+      _id,
+      isGoogleUser,
+      googleEmail,
+      avatar: avatar || null,
+    };
+
+    const addressData = await Address.findOne({
+      user: id,
+    });
+
+    const ordersData = await Order.find({
+      user: id,
+    });
+
+    let wishlistData = await Wishlist.findOne({
+      user: id,
+    });
+    if (wishlistData) {
+      let promises = [];
+      wishlistData.products.map((product) =>
+        promises.push(rawIdProductGetter(product))
+      );
+      const rawProds = await Promise.all(promises);
+      wishlistData = rawProds.filter((product) => product); //! null undefined
+    }
+
+    const publicationsData = await Publication.find({
+      owner: id,
+    })
+      .populate("product")
+      .exec();
+
+    return res.json({
+      userData,
+      addressData: addressData.address,
+      ordersData,
+      wishlistData,
+      publicationsData,
+    });
   } catch (error) {
     next(error);
   }
