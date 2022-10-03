@@ -334,6 +334,35 @@ const getMetrics = async (req, res, next) => {
   }
 };
 
+const getUserMiniData = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (id.length !== 24)
+      return res.json({
+        error: true,
+        message: "Formato de ID incorrecto (solo se aceptan 24 caracteres)",
+      });
+
+    const userFound = await User.findById(id);
+    if (!userFound)
+      return res.json({ error: true, message: "Cuenta no encontrada" });
+
+    const { name, email, _id, isGoogleUser, googleEmail } = userFound;
+    const userData = {
+      name,
+      email,
+      _id,
+      isGoogleUser,
+      googleEmail,
+    };
+
+    return res.json(userData);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   verifyAdminRoute,
   getAllUsers,
@@ -347,4 +376,5 @@ module.exports = {
   unbanUser,
   deleteAllProducts,
   getMetrics,
+  getUserMiniData,
 };

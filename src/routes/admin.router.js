@@ -13,6 +13,7 @@ const {
   unbanUser,
   deleteAllProducts,
   getMetrics,
+  getUserMiniData,
 } = require("../controllers/admin.ctrl");
 
 router.get("/verify", verifyAdminRoute);
@@ -20,6 +21,7 @@ router.get("/verify", verifyAdminRoute);
 router.get("/user/getAll", getAllUsers);
 router.get("/user/:id", getUser);
 router.get("/order/getAll", getAllOrders);
+router.get("/order/user/:id", getUserMiniData);
 router.put("/user/promote/:id", promoteUser);
 router.post("/user/getAddresses", getUserAddresses);
 router.post("/user/getOrders", getUserOrders);
