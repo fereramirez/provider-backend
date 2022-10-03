@@ -150,7 +150,7 @@ const getUser = async (req, res, next) => {
 
     return res.json({
       userData,
-      addressData: addressData.address,
+      addressData: addressData ? addressData.address : [],
       ordersData,
       wishlistData,
       publicationsData,
@@ -295,7 +295,11 @@ const getMetrics = async (req, res, next) => {
     const totalUsers = await User.countDocuments({});
     const googleUsers = await User.countDocuments({ isGoogleUser: true });
 
-    const publishedProducts = await Product.countDocuments({});
+    const ownPublishedProducts = await Product.countDocuments({
+      seller: "PROVIDER",
+    });
+    const allPublishedProducts = await Product.countDocuments();
+    const userPublishedProducts = allPublishedProducts - ownPublishedProducts;
     const productsOnSale = await Product.countDocuments({ on_sale: true });
 
     //! PRODUCTOS POR CATEGORIA
@@ -320,7 +324,8 @@ const getMetrics = async (req, res, next) => {
     return res.json({
       totalUsers,
       googleUsers,
-      publishedProducts,
+      ownPublishedProducts,
+      userPublishedProducts,
       productsOnSale,
       productsSold,
       totalProfits,
