@@ -59,22 +59,11 @@ const productUpdater = async (products, order, buyer) => {
       //? PUBLICATIONS
       const publicationFound = await Publication.findOne({ product: id });
 
-      if (publicationFound.sales) {
-        publicationFound.sales.push({
-          buyer: {
-            _id: buyer._id,
-            name: buyer.name,
-            email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
-          },
-          quantity: amount,
-          price,
-          payment_date,
-          delivery_date,
-        });
-      } else {
-        publicationFound.sales = [
-          {
+      if (publicationFound) {
+        if (publicationFound.sales) {
+          publicationFound.sales.push({
             buyer: {
+              _id: buyer._id,
               name: buyer.name,
               email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
             },
@@ -82,10 +71,23 @@ const productUpdater = async (products, order, buyer) => {
             price,
             payment_date,
             delivery_date,
-          },
-        ];
+          });
+        } else {
+          publicationFound.sales = [
+            {
+              buyer: {
+                name: buyer.name,
+                email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
+              },
+              quantity: amount,
+              price,
+              payment_date,
+              delivery_date,
+            },
+          ];
+        }
+        await publicationFound.save();
       }
-      await publicationFound.save();
 
       //? NOTIFICATIONS
       const notif = await Notifications.findOne({ user_id: prod.seller });
