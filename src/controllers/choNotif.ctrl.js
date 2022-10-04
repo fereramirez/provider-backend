@@ -137,6 +137,7 @@ const productUpdater = async (products, order, buyer) => {
             date: formatDate(payment_date),
             quantity: amount,
             product: prod.name,
+            price: prod.price,
             discount: prod.discount,
             total: formatPrice(amount * prod.price).int,
             buyer: buyer.name,
