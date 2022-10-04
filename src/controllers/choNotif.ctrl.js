@@ -57,6 +57,7 @@ const productUpdater = async (products, order, buyer) => {
       await prod.save();
 
       //? PUBLICATIONS
+      console.log("-------1");
       const publicationFound = await Publication.findOne({ product: id });
 
       if (publicationFound) {
@@ -88,37 +89,40 @@ const productUpdater = async (products, order, buyer) => {
         }
         await publicationFound.save();
       }
+      console.log("-------2");
 
       //? NOTIFICATIONS
-      const notif = await Notifications.findOne({ user_id: prod.seller });
-      if (notif) {
-        // NO STOCK ON PUCLICATION
-        if ((prod.available_quantity -= amount) < 1) {
+      if (prod.seller !== "PROVIDER") {
+        const notif = await Notifications.findOne({ user_id: prod.seller });
+        if (notif) {
+          // NO STOCK ON PUCLICATION
+          if ((prod.available_quantity -= amount) < 1) {
+            notif.notif_list.push({
+              notif_type: "warning",
+              title: `¡Has vendido todo!`,
+              description: `¡Felicitaciones! Has vendido todas las existencias de tu publicación "${prod.name}". Esta ya no será mostrada en los resultados de búsqueda hasta que se reponga el stock.`,
+              link: `/profile/products`,
+              date: new Date().toLocaleString("es-Ar", {
+                timeZone: "America/Buenos_Aires",
+              }),
+              seen: false,
+            });
+          }
+
+          // SELL
           notif.notif_list.push({
-            notif_type: "warning",
-            title: `¡Has vendido todo!`,
-            description: `¡Felicitaciones! Has vendido todas las existencias de tu publicación "${prod.name}". Esta ya no será mostrada en los resultados de búsqueda hasta que se reponga el stock.`,
-            link: `/profile/products`,
+            notif_type: "success",
+            title: `Has concretado una venta`,
+            description: `Se ha concretado una venta en tu publicación "${prod.name}". Más detalles a continuación... `,
+            link: `/profile/sales`,
             date: new Date().toLocaleString("es-Ar", {
               timeZone: "America/Buenos_Aires",
             }),
             seen: false,
           });
+
+          await notif.save();
         }
-
-        // SELL
-        notif.notif_list.push({
-          notif_type: "success",
-          title: `Has concretado una venta`,
-          description: `Se ha concretado una venta en tu publicación "${prod.name}". Más detalles a continuación... `,
-          link: `/profile/sales`,
-          date: new Date().toLocaleString("es-Ar", {
-            timeZone: "America/Buenos_Aires",
-          }),
-          seen: false,
-        });
-
-        await notif.save();
       }
 
       //? SEND EMAIL TO SELLER
