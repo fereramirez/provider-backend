@@ -121,10 +121,6 @@ const productUpdater = async (products, order, buyer) => {
 
       //? SEND EMAIL TO SELLER
       const sellerFound = await User.findById(prod.seller);
-      console.log("amount", amount);
-      console.log("type amount", typeof amount);
-      console.log("prod.price", prod.price);
-      console.log("type prod.price", typeof prod.price);
       sellerFound &&
         (await sendEmail(
           sellerFound.isGoogleUser
@@ -148,6 +144,7 @@ const productUpdater = async (products, order, buyer) => {
   }
 
   //? SEND EMAIL TO BUYER
+  console.log("orderProducts", orderProducts);
   await sendEmail(
     buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
     "Resúmen de compra",
@@ -207,13 +204,11 @@ const notificationStripe = async (req, res, next) => {
 
     return res.status(200).send("ok");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 const notificationMercadopago = async (req, res, next) => {
-  console.log(req.query);
   try {
     const { type } = req.query;
 
@@ -263,7 +258,6 @@ const notificationMercadopago = async (req, res, next) => {
 
     return res.status(200).send("");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
