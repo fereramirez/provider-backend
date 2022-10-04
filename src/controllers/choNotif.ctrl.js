@@ -28,7 +28,7 @@ const productUpdater = async (products, order, buyer) => {
     user: user_id,
     _id,
     payment_date,
-    products,
+    orderProducts,
     shipping_address: { street_name, street_number, city, zip_code, state },
     shipping_cost,
     delivery_date,
@@ -150,7 +150,7 @@ const productUpdater = async (products, order, buyer) => {
     {
       order_id: _id,
       date: formatDate(payment_date),
-      products,
+      products: orderProducts,
       street_name,
       street_number,
       city,
