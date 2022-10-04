@@ -149,7 +149,7 @@ const productUpdater = async (products, order, buyer) => {
 
   //? SEND EMAIL TO BUYER
   console.log(buyer);
-  console.log(buyer.email);
+  console.log(buyer.isGoogleUser ? buyer.googleEmail : buyer.email);
   await sendEmail(
     buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
     "Resúmen de compra",
