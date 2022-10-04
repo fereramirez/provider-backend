@@ -121,6 +121,10 @@ const productUpdater = async (products, order, buyer) => {
 
       //? SEND EMAIL TO SELLER
       const sellerFound = await User.findById(prod.seller);
+      console.log("amount", amount);
+      console.log("type amount", typeof amount);
+      console.log("prod.price", prod.price);
+      console.log("type prod.price", typeof prod.price);
       sellerFound &&
         (await sendEmail(
           sellerFound.isGoogleUser
