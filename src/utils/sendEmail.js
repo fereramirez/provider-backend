@@ -38,6 +38,14 @@ Handlebars.registerHelper("finalPrice", function (price, sale_price) {
   }
 });
 
+Handlebars.registerHelper("getFinalPrice", function (price, discount) {
+  if (discount === 0) {
+    return formatPrice(price).int.toString();
+  } else {
+    return formatPrice(((100 - discount) * price) / 100).int.toString();
+  }
+});
+
 Handlebars.registerHelper("quantity", function (quantity) {
   if (quantity > 1) {
     return quantity + "x";

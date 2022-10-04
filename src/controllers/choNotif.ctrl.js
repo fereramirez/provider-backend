@@ -24,7 +24,16 @@ const deliveryDate = (flash) => {
 };
 
 const productUpdater = async (products, order, buyer) => {
-  const { user: user_id, payment_date, delivery_date } = order;
+  const {
+    user: user_id,
+    _id,
+    payment_date,
+    products,
+    shipping_address: { street_name, street_number, city, zip_code, state },
+    shipping_cost,
+    delivery_date,
+    total,
+  } = order;
   let list = products.map((e) => ({
     id: e.product_id,
     amount: e.quantity,
@@ -67,9 +76,7 @@ const productUpdater = async (products, order, buyer) => {
           {
             buyer: {
               name: buyer.name,
-              email: userFound.isGoogleUser
-                ? userFound.googleEmail
-                : userFound.email,
+              email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
             },
             quantity: amount,
             price,
@@ -111,8 +118,51 @@ const productUpdater = async (products, order, buyer) => {
 
         await notif.save();
       }
+
+      //? SEND EMAIL TO SELLER
+      const sellerFound = await User.findById(prod.seller);
+      sellerFound &&
+        (await sendEmail(
+          sellerFound.isGoogleUser
+            ? sellerFound.googleEmail
+            : sellerFound.email,
+          "¡Has concretado una venta!",
+          `./templates/saleResume.html`,
+          {
+            order_id: _id,
+            date: formatDate(payment_date),
+            quantity: amount,
+            product: prod.name,
+            discount: prod.discount,
+            total: formatPrice(quantity * prod.price).int,
+            buyer: buyer.name,
+            email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
+          }
+        ));
     }
   }
+
+  //? SEND EMAIL TO BUYER
+  await sendEmail(
+    buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
+    "Resúmen de compra",
+    `./templates/orderResume.html`,
+    {
+      order_id: _id,
+      date: formatDate(payment_date),
+      products,
+      street_name,
+      street_number,
+      city,
+      zip_code,
+      state,
+      shipping_cost: shipping_cost
+        ? `Envío $${formatPrice(shipping_cost).int}`
+        : "Envío gratis",
+      delivery_date: formatDate(delivery_date),
+      total: formatPrice(total + shipping_cost).int,
+    }
+  );
 };
 
 const notificationStripe = async (req, res, next) => {
@@ -148,37 +198,6 @@ const notificationStripe = async (req, res, next) => {
 
       //? restar unidades de cada stock y agregar buyers
       productUpdater(target.products, newOrder, userFound);
-
-      const {
-        _id,
-        payment_date,
-        products,
-        shipping_address: { street_name, street_number, city, zip_code, state },
-        shipping_cost,
-        delivery_date,
-        total,
-      } = newOrder;
-
-      await sendEmail(
-        userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
-        "Resúmen de compra",
-        `./templates/orderResume.html`,
-        {
-          order_id: _id,
-          date: formatDate(payment_date),
-          products: products,
-          street_name,
-          street_number,
-          city,
-          zip_code,
-          state,
-          shipping_cost: shipping_cost
-            ? `Envío $${formatPrice(shipping_cost).int}`
-            : "Envío gratis",
-          delivery_date: formatDate(delivery_date),
-          total: formatPrice(total + shipping_cost).int,
-        }
-      );
     }
 
     return res.status(200).send("ok");
@@ -234,43 +253,6 @@ const notificationMercadopago = async (req, res, next) => {
 
         //? restar unidades de cada stock y agregar buyers
         productUpdater(target.products, newOrder, userFound);
-
-        const {
-          _id,
-          payment_date,
-          products,
-          shipping_address: {
-            street_name,
-            street_number,
-            city,
-            zip_code,
-            state,
-          },
-          shipping_cost,
-          delivery_date,
-          total,
-        } = newOrder;
-
-        await sendEmail(
-          userFound.isGoogleUser ? userFound.googleEmail : userFound.email,
-          "Resúmen de compra",
-          `./templates/orderResume.html`,
-          {
-            order_id: _id,
-            date: formatDate(payment_date),
-            products: products,
-            street_name,
-            street_number,
-            city,
-            zip_code,
-            state,
-            shipping_cost: shipping_cost
-              ? `Envío $${formatPrice(shipping_cost).int}`
-              : "Envío gratis",
-            delivery_date: formatDate(delivery_date),
-            total: formatPrice(total + shipping_cost).int,
-          }
-        );
       }
     }
 

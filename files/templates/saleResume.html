@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body
+    style="
+      font-family: 'Poppins', sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      text-align: center;
+      background-color: black;
+      color: white;
+    "
+  >
+    <header
+      style="
+        font-family: 'Poppins', sans-serif;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: black;
+        color: white;
+
+        font-size: 1rem;
+      "
+    >
+      <a
+        href="https://providerstore.vercel.app/"
+        target="_blank"
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          box-sizing: border-box;
+          text-align: center;
+          background-color: black;
+          max-width: 600px;
+          width: 100%;
+          margin: auto;
+        "
+      >
+        <img
+          src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
+          alt="Provider - "
+          style="
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: black;
+
+            width: 300px;
+            padding-top: 3rem;
+          "
+        />
+      </a>
+    </header>
+
+    <div
+      style="
+        font-family: 'Poppins', sans-serif;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: black;
+        color: white;
+
+        font-size: 1rem;
+        max-width: 600px;
+        width: 100%;
+        margin: auto;
+      "
+    >
+      <h1
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          text-align: center;
+          background-color: black;
+          color: white;
+          max-width: 600px;
+          width: 100%;
+          margin: auto;
+
+          padding-bottom: 2rem;
+          padding-top: 1.5rem;
+          font-size: 1.5rem;
+        "
+      >
+        ¡Has concretado una venta!
+      </h1>
+
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        Orden #{{order_id}}
+      </div>
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        Pagado el {{date}}
+      </div>
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        {{buyer}}
+      </div>
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        {{email}}
+      </div>
+
+      <table
+        style="
+          font-family: 'Poppins', sans-serif;
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 1rem;
+        "
+      >
+        <tbody
+          style="
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            margin-top: 1.5rem;
+          "
+        >
+          <tr
+            style="
+              font-family: 'Poppins', sans-serif;
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+              margin-top: 0.4rem;
+              padding-bottom: 0.1rem;
+              border-bottom: 1px solid #ffffff10;
+            "
+          >
+            <td
+              style="
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                display: block;
+              "
+            >
+              <p
+                style="
+                  font-family: 'Poppins', sans-serif;
+                  box-sizing: border-box;
+                  margin: 0;
+                  padding: 0;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  text-align: left;
+                  padding-left: 1rem;
+                "
+              >
+                {{quantity quantity}} {{product}}
+              </p>
+            </td>
+            <td
+              style="
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                color: white;
+                text-align: right;
+                white-space: nowrap;
+                padding-right: 1rem;
+              "
+            >
+              {{quantity quantity}} ${{getFinalPrice price discount}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          margin: 1.5rem 0;
+          padding-bottom: 0.1rem;
+          border-bottom: 1px solid #ffffff10;
+        "
+      >
+        <div
+          style="
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-align: right;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            padding-right: 1rem;
+          "
+        >
+          ${{total}}
+        </div>
+      </div>
+    </div>
+
+    <footer
+      style="
+        font-family: 'Poppins', sans-serif;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: black;
+        color: white;
+      "
+    >
+      <div
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          box-sizing: border-box;
+          text-align: center;
+          background-color: black;
+          color: white;
+          max-width: 600px;
+          width: 100%;
+          margin: auto;
+
+          font-size: 0.9rem;
+
+          padding: 2rem 0;
+          border-bottom: 1px solid white;
+        "
+      >
+        ¿No has sido tú? Asegúrate de cambiar la contraseña inmediatamente y
+        ponte en contacto con nosotros.
+      </div>
+      <div
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          box-sizing: border-box;
+          text-align: center;
+          background-color: black;
+          color: white;
+          max-width: 600px;
+          width: 100%;
+          margin: auto;
+
+          padding-bottom: 0.5rem;
+          padding-top: 2rem;
+          font-size: 0.75rem;
+        "
+      >
+        © 2022 Provider S.R.L. Todos los derechos reservados
+      </div>
+      <div
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          box-sizing: border-box;
+          text-align: center;
+          background-color: black;
+          color: white;
+          max-width: 600px;
+          width: 100%;
+          margin: auto;
+
+          padding-bottom: 2.5rem;
+          font-size: 0.75rem;
+        "
+      >
+        <a
+          href="https://providerstore.vercel.app/faqs"
+          style="
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: black;
+            color: white;
+
+            font-size: 0.75rem;
+          "
+        >
+          Preguntas frecuentes
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>
