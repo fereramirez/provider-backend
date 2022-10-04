@@ -90,11 +90,7 @@ const productUpdater = async (products, order, buyer) => {
       }
 
       //? NOTIFICATIONS
-      console.log("prod.seller", prod.seller);
-      console.log("ty prod.seller", typeof prod.seller);
-      console.log("prod.seller !== PROVIDER", prod.seller !== "PROVIDER");
       if (prod.seller !== "PROVIDER") {
-        console.log("--------no entra");
         const notif = await Notifications.findOne({ user_id: prod.seller });
         if (notif) {
           // NO STOCK ON PUCLICATION
@@ -152,7 +148,8 @@ const productUpdater = async (products, order, buyer) => {
   }
 
   //? SEND EMAIL TO BUYER
-  console.log("orderProducts", orderProducts);
+  console.log(buyer);
+  console.log(buyer.email);
   await sendEmail(
     buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
     "Resúmen de compra",
@@ -173,6 +170,7 @@ const productUpdater = async (products, order, buyer) => {
       total: formatPrice(total + shipping_cost).int,
     }
   );
+  const sellerFound = await User.findById(prod.seller);
 };
 
 const notificationStripe = async (req, res, next) => {
