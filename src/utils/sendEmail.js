@@ -53,20 +53,14 @@ Handlebars.registerHelper("quantity", function (quantity) {
 });
 
 const sendEmail = async (email, subject, templateUrl, variables) => {
-  console.log("---------1");
-  console.log(email);
-  console.log(subject);
   try {
     const filePath = path.join(process.cwd(), "files", templateUrl);
     const source = fs.readFileSync(filePath, "utf-8").toString();
-    console.log("---------2");
 
     const template = Handlebars.compile(source);
     const html = template(variables);
-    console.log("---------3");
 
     const accessToken = await oAuth2Client.getAccessToken();
-    console.log("---------4");
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -78,7 +72,6 @@ const sendEmail = async (email, subject, templateUrl, variables) => {
         accessToken: accessToken,
       },
     });
-    console.log("---------5");
 
     const mailOptions = {
       from: `Provider <${EMAIL_EPROVIDER}>`,
@@ -87,13 +80,9 @@ const sendEmail = async (email, subject, templateUrl, variables) => {
       html,
     };
 
-    console.log("---------6");
     const result = await transport.sendMail(mailOptions);
-    console.log("---------fin");
     return result;
   } catch (error) {
-    console.log("---------error");
-    console.log(error);
     throw new Error(error);
   }
 };
