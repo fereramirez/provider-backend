@@ -148,8 +148,6 @@ const productUpdater = async (products, order, buyer) => {
   }
 
   //? SEND EMAIL TO BUYER
-  console.log(buyer);
-  console.log(buyer.isGoogleUser ? buyer.googleEmail : buyer.email);
   await sendEmail(
     buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
     "Resúmen de compra",
@@ -170,7 +168,6 @@ const productUpdater = async (products, order, buyer) => {
       total: formatPrice(total + shipping_cost).int,
     }
   );
-  const sellerFound = await User.findById(prod.seller);
 };
 
 const notificationStripe = async (req, res, next) => {
