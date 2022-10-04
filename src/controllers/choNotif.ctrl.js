@@ -134,7 +134,7 @@ const productUpdater = async (products, order, buyer) => {
             quantity: amount,
             product: prod.name,
             discount: prod.discount,
-            total: formatPrice(quantity * prod.price).int,
+            total: formatPrice(amount * prod.price).int,
             buyer: buyer.name,
             email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
           }
