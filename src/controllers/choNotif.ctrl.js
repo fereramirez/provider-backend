@@ -56,8 +56,6 @@ const productUpdater = async (products, order, buyer) => {
 
       await prod.save();
 
-      console.log("-------1");
-
       //? PUBLICATIONS
       const publicationFound = await Publication.findOne({ product: id });
 
@@ -91,12 +89,13 @@ const productUpdater = async (products, order, buyer) => {
         await publicationFound.save();
       }
 
-      console.log("-------2");
+      console.log("-------1");
 
       //? NOTIFICATIONS
       console.log("orderProducts", orderProducts);
       console.log("prod.seller", prod.seller);
       console.log("ty prod.seller", typeof prod.seller);
+      console.log("prod.seller !== PROVIDER", prod.seller !== "PROVIDER");
       if (prod.seller !== "PROVIDER") {
         const notif = await Notifications.findOne({ user_id: prod.seller });
         if (notif) {
