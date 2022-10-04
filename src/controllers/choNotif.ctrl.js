@@ -56,6 +56,8 @@ const productUpdater = async (products, order, buyer) => {
 
       await prod.save();
 
+      console.log("-------1");
+
       //? PUBLICATIONS
       const publicationFound = await Publication.findOne({ product: id });
 
@@ -88,6 +90,8 @@ const productUpdater = async (products, order, buyer) => {
         }
         await publicationFound.save();
       }
+
+      console.log("-------2");
 
       //? NOTIFICATIONS
       console.log("orderProducts", orderProducts);
