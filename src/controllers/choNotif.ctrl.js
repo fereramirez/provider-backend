@@ -89,14 +89,12 @@ const productUpdater = async (products, order, buyer) => {
         await publicationFound.save();
       }
 
-      console.log("-------1");
-
       //? NOTIFICATIONS
-      console.log("orderProducts", orderProducts);
       console.log("prod.seller", prod.seller);
       console.log("ty prod.seller", typeof prod.seller);
       console.log("prod.seller !== PROVIDER", prod.seller !== "PROVIDER");
       if (prod.seller !== "PROVIDER") {
+        console.log("--------no entra");
         const notif = await Notifications.findOne({ user_id: prod.seller });
         if (notif) {
           // NO STOCK ON PUCLICATION
@@ -127,29 +125,29 @@ const productUpdater = async (products, order, buyer) => {
 
           await notif.save();
         }
-      }
 
-      //? SEND EMAIL TO SELLER
-      const sellerFound = await User.findById(prod.seller);
-      sellerFound &&
-        (await sendEmail(
-          sellerFound.isGoogleUser
-            ? sellerFound.googleEmail
-            : sellerFound.email,
-          "¡Has concretado una venta!",
-          `./templates/saleResume.html`,
-          {
-            order_id: _id,
-            date: formatDate(payment_date),
-            quantity: amount,
-            product: prod.name,
-            price: prod.price,
-            discount: prod.discount,
-            total: formatPrice(amount * prod.price).int,
-            buyer: buyer.name,
-            email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
-          }
-        ));
+        //? SEND EMAIL TO SELLER
+        const sellerFound = await User.findById(prod.seller);
+        sellerFound &&
+          (await sendEmail(
+            sellerFound.isGoogleUser
+              ? sellerFound.googleEmail
+              : sellerFound.email,
+            "¡Has concretado una venta!",
+            `./templates/saleResume.html`,
+            {
+              order_id: _id,
+              date: formatDate(payment_date),
+              quantity: amount,
+              product: prod.name,
+              price: prod.price,
+              discount: prod.discount,
+              total: formatPrice(amount * prod.price).int,
+              buyer: buyer.name,
+              email: buyer.isGoogleUser ? buyer.googleEmail : buyer.email,
+            }
+          ));
+      }
     }
   }
 
