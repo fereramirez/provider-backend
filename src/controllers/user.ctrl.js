@@ -281,10 +281,16 @@ const updatePassword = async (req, res, next) => {
     const { password, oldPassword } = req.body;
 
     const userFound = await User.findById(req.user._id);
+
+    if (userFound.email === "usuario@provider.com")
+      return res.json({
+        message: "Usuario protegido, imposible modificar contraseña",
+        error: true,
+      });
+
     const validity = await userFound.comparePassword(oldPassword);
-    if (!validity) {
+    if (!validity)
       return res.json({ message: "Contraseña incorrecta", error: true });
-    }
 
     userFound.password = password;
     await userFound.save();
