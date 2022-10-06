@@ -36,7 +36,8 @@ passport.use(
             null,
             { ...newUser, newUser: true },
             {
-              message: "Revisa tu email para verificar tu cuenta",
+              message:
+                "Cuenta creada con éxito. Revisa tu email para verificarla",
             }
           );
         } else {
