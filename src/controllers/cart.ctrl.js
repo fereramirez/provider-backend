@@ -85,7 +85,7 @@ const addToCart = async (req, res, next) => {
         owner: userId,
       });
       await newCart.save();
-      return res.json(newCart);
+      return res.json({ message: "Producto agregado al carrito", ok: true });
     }
   } catch (error) {
     next(error);
